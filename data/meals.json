@@ -1,0 +1,150 @@
+{
+  "ingredient_bank": {
+    "ING-668aba6d": {
+      "uid": "ING-668aba6d",
+      "name": "Rice",
+      "tags": [
+        "Grain"
+      ],
+      "purchase_type": "bulk"
+    },
+    "ING-39f1b795": {
+      "uid": "ING-39f1b795",
+      "name": "Potato",
+      "tags": [
+        "Vegetable"
+      ],
+      "purchase_type": "bulk"
+    },
+    "ING-57356940": {
+      "uid": "ING-57356940",
+      "name": "Spinach",
+      "tags": [
+        "Vegetable"
+      ],
+      "purchase_type": "weekly"
+    },
+    "ING-a7fc5753": {
+      "uid": "ING-a7fc5753",
+      "name": "Eggs",
+      "tags": [
+        "Protein"
+      ],
+      "purchase_type": "weekly"
+    },
+    "ING-8408ae8b": {
+      "uid": "ING-8408ae8b",
+      "name": "Kimchi",
+      "tags": [
+        "Vegetable"
+      ],
+      "purchase_type": "weekly"
+    }
+  },
+  "dish_bank": {
+    "DISH-59137a22": {
+      "uid": "DISH-59137a22",
+      "name": "Kimchee Fried Rice",
+      "tags": [
+        "Eastern"
+      ],
+      "ingredient_uids": [
+        "ING-668aba6d",
+        "ING-8408ae8b",
+        "ING-a7fc5753"
+      ]
+    },
+    "DISH-ee594650": {
+      "uid": "DISH-ee594650",
+      "name": "Shepherd's Pie",
+      "tags": [
+        "Western"
+      ],
+      "ingredient_uids": [
+        "ING-39f1b795"
+      ]
+    },
+    "DISH-c374e108": {
+      "uid": "DISH-c374e108",
+      "name": "Vegetable Stir Fry",
+      "tags": [
+        "Eastern"
+      ],
+      "ingredient_uids": [
+        "ING-57356940"
+      ]
+    }
+  },
+  "ai_context_bank": {
+    "CTX-bd6a8ecb": {
+      "uid": "CTX-bd6a8ecb",
+      "category": "dietary",
+      "context": "We are vegetarian. We do not eat any meat, but do eat dairy and eggs."
+    },
+    "CTX-bfc417b4": {
+      "uid": "CTX-bfc417b4",
+      "category": "location",
+      "context": "We live in Johor Bahru, Malaysia. We prefer local ingredients."
+    }
+  },
+  "plans": {
+    "PLAN-2025-01": {
+      "uid": "PLAN-2025-01",
+      "month": "2025-01",
+      "weeks": [
+        {
+          "weekday_dinners": {
+            "Mon": "DISH-59137a22",
+            "Tue": null,
+            "Wed": null,
+            "Thu": null,
+            "Fri": null
+          },
+          "weekend_meals": {
+            "Sat": null,
+            "Sun": null
+          }
+        },
+        {
+          "weekday_dinners": {
+            "Mon": null,
+            "Tue": null,
+            "Wed": null,
+            "Thu": null,
+            "Fri": null
+          },
+          "weekend_meals": {
+            "Sat": null,
+            "Sun": null
+          }
+        },
+        {
+          "weekday_dinners": {
+            "Mon": null,
+            "Tue": null,
+            "Wed": null,
+            "Thu": null,
+            "Fri": null
+          },
+          "weekend_meals": {
+            "Sat": null,
+            "Sun": null
+          }
+        },
+        {
+          "weekday_dinners": {
+            "Mon": null,
+            "Tue": null,
+            "Wed": null,
+            "Thu": null,
+            "Fri": null
+          },
+          "weekend_meals": {
+            "Sat": null,
+            "Sun": null
+          }
+        }
+      ]
+    }
+  }
+}
