@@ -1,0 +1,118 @@
+{
+  "DISH-59137a22": {
+    "uid": "DISH-59137a22",
+    "name": "Kimchee Fried Rice",
+    "tags": [
+      "Eastern"
+    ],
+    "ingredient_uids": [
+      "ING-668aba6d",
+      "ING-8408ae8b",
+      "ING-a7fc5753"
+    ]
+  },
+  "DISH-ee594650": {
+    "uid": "DISH-ee594650",
+    "name": "Shepherd's Pie",
+    "tags": [
+      "Western"
+    ],
+    "ingredient_uids": [
+      "ING-39f1b795"
+    ]
+  },
+  "DISH-c374e108": {
+    "uid": "DISH-c374e108",
+    "name": "Vegetable Stir Fry",
+    "tags": [
+      "Eastern"
+    ],
+    "ingredient_uids": [
+      "ING-57356940"
+    ]
+  },
+  "DISH-dd5daf44": {
+    "uid": "DISH-dd5daf44",
+    "name": "Tofu Stir Fry",
+    "tags": [
+      "Eastern"
+    ],
+    "ingredient_uids": [
+      "ING-3d4ccf49",
+      "ING-112894e9",
+      "ING-d994fd03",
+      "ING-5c251d0c",
+      "ING-ca86a381",
+      "ING-928ba699"
+    ]
+  },
+  "DISH-c66bd680": {
+    "uid": "DISH-c66bd680",
+    "name": "Miso Soup",
+    "tags": [
+      "Eastern"
+    ],
+    "ingredient_uids": [
+      "ING-3d4ccf49",
+      "ING-72e7dc04",
+      "ING-ceefd596",
+      "ING-8af6470a"
+    ]
+  },
+  "DISH-c7f53e6b": {
+    "uid": "DISH-c7f53e6b",
+    "name": "Vegetable Fried Rice",
+    "tags": [
+      "Eastern"
+    ],
+    "ingredient_uids": [
+      "ING-668aba6d",
+      "ING-112894e9",
+      "ING-ceefd596",
+      "ING-d994fd03",
+      "ING-5c251d0c",
+      "ING-ca86a381",
+      "ING-928ba699"
+    ]
+  },
+  "DISH-c2b0cb45": {
+    "uid": "DISH-c2b0cb45",
+    "name": "Pad Thai",
+    "tags": [
+      "Eastern"
+    ],
+    "ingredient_uids": [
+      "ING-80163e46",
+      "ING-3d4ccf49",
+      "ING-4700caeb",
+      "ING-ceefd596"
+    ]
+  },
+  "DISH-452267b4": {
+    "uid": "DISH-452267b4",
+    "name": "Thai Green Curry",
+    "tags": [
+      "Eastern"
+    ],
+    "ingredient_uids": [
+      "ING-3d4ccf49",
+      "ING-a33994e4",
+      "ING-fb2f1093",
+      "ING-112894e9"
+    ]
+  },
+  "DISH-b81ec8d3": {
+    "uid": "DISH-b81ec8d3",
+    "name": "Edamame Buddha Bowl",
+    "tags": [
+      "Eastern"
+    ],
+    "ingredient_uids": [
+      "ING-668aba6d",
+      "ING-d30c7cb5",
+      "ING-112894e9",
+      "ING-85f79a7e",
+      "ING-928ba699"
+    ]
+  }
+}

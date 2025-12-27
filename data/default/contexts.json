@@ -1,0 +1,22 @@
+{
+  "CTX-bd6a8ecb": {
+    "uid": "CTX-bd6a8ecb",
+    "category": "dietary",
+    "context": "We are vegetarian. We do not eat any meat, but do eat dairy and eggs."
+  },
+  "CTX-bfc417b4": {
+    "uid": "CTX-bfc417b4",
+    "category": "location",
+    "context": "We live in Johor Bahru, Malaysia. We prefer local ingredients."
+  },
+  "CTX-0dfb6a89": {
+    "uid": "CTX-0dfb6a89",
+    "category": "dietary",
+    "context": "We are vegetarian. We prefer Asian cuisines, especially Thai and Japanese."
+  },
+  "CTX-e8a9666a": {
+    "uid": "CTX-e8a9666a",
+    "category": "location",
+    "context": "We live in Singapore. Local Asian ingredients are easy to find."
+  }
+}

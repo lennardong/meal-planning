@@ -16,4 +16,4 @@ dependencies = [
 ]
 
 [project.scripts]
-meal-plan = "meal_planning.cli.main:app"
+meal = "meal_planning.api.cli.main:main"

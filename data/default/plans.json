@@ -1,0 +1,60 @@
+{
+  "PLAN-2025-01": {
+    "uid": "PLAN-2025-01",
+    "month": "2025-01",
+    "weeks": [
+      {
+        "weekday_dinners": {
+          "Mon": "DISH-dd5daf44",
+          "Tue": "DISH-c66bd680",
+          "Wed": "DISH-c7f53e6b",
+          "Thu": "DISH-c2b0cb45",
+          "Fri": "DISH-452267b4"
+        },
+        "weekend_meals": {
+          "Sat": "DISH-b81ec8d3",
+          "Sun": null
+        }
+      },
+      {
+        "weekday_dinners": {
+          "Mon": null,
+          "Tue": null,
+          "Wed": null,
+          "Thu": null,
+          "Fri": null
+        },
+        "weekend_meals": {
+          "Sat": null,
+          "Sun": null
+        }
+      },
+      {
+        "weekday_dinners": {
+          "Mon": null,
+          "Tue": null,
+          "Wed": null,
+          "Thu": null,
+          "Fri": null
+        },
+        "weekend_meals": {
+          "Sat": null,
+          "Sun": null
+        }
+      },
+      {
+        "weekday_dinners": {
+          "Mon": null,
+          "Tue": null,
+          "Wed": null,
+          "Thu": null,
+          "Fri": null
+        },
+        "weekend_meals": {
+          "Sat": null,
+          "Sun": null
+        }
+      }
+    ]
+  }
+}
