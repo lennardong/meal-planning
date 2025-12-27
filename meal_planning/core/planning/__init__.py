@@ -1,10 +1,9 @@
-"""Planning bounded context - meal plans and schedules."""
+"""Planning bounded context - meal plans and shortlists."""
 
-from meal_planning.core.planning.models import MonthlyPlan, WeekPlan
-from meal_planning.core.planning.enums import Day
+from meal_planning.core.planning.models import MealPlan, WeekPlan, Shortlist
 
 __all__ = [
-    "MonthlyPlan",
+    "MealPlan",
     "WeekPlan",
-    "Day",
+    "Shortlist",
 ]

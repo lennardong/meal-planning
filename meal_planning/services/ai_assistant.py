@@ -8,8 +8,6 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from meal_planning.core.planning.enums import Day
-
 if TYPE_CHECKING:
     from meal_planning.services.ports.ai_client import AIClientPort
     from meal_planning.services.catalogue import CatalogueService
@@ -18,12 +16,11 @@ if TYPE_CHECKING:
 
 
 # Prompt templates
-SYSTEM_PROMPT = """You are a helpful meal planning assistant. You help users plan their weekly and monthly meals.
+SYSTEM_PROMPT = """You are a helpful meal planning assistant. You help users plan their weekly meals.
 
 ## Your Capabilities
-- View and manage a catalogue of ingredients and dishes
-- Create and modify monthly meal plans (4 weeks per month)
-- Generate shopping lists separated by bulk vs weekly purchase items
+- View and manage a catalogue of dishes
+- Create meal plans for N weeks using the shortlist
 - Analyze meal variety and suggest improvements
 
 ## User Context
@@ -35,9 +32,8 @@ SYSTEM_PROMPT = """You are a helpful meal planning assistant. You help users pla
 ## Guidelines
 1. Always consider the user's dietary preferences and constraints
 2. Aim for variety - mix Eastern and Western dishes
-3. Don't schedule the same dish more than 2-3 times per month
+3. Don't schedule the same dish more than 2-3 times per plan
 4. Consider ingredient reuse for efficiency
-5. Balance weekday convenience with weekend cooking enjoyment
 
 When suggesting meals:
 - Explain your reasoning
@@ -101,37 +97,35 @@ class AIAssistantService:
             available_dishes=self._format_dishes_for_prompt(),
         )
 
-    def get_plan_summary(self, month: str) -> str | None:
-        """Get a text summary of a month's plan.
+    def get_plan_summary(self, plan_name: str) -> str | None:
+        """Get a text summary of a meal plan.
 
         Args:
-            month: Month in format "YYYY-MM".
+            plan_name: Plan name or UID.
 
         Returns:
             Human-readable summary, or None if plan not found.
         """
-        plan_result = self._planning.get_plan_for_month(month)
+        plan_result = self._planning.get_plan(plan_name)
+        if plan_result.is_err():
+            plan_result = self._planning.get_plan_by_name(plan_name)
+
         if plan_result.is_err():
             return None
 
         plan = plan_result.unwrap()
-        lines = [f"Meal Plan for {month}", "=" * 40]
+        lines = [f"Meal Plan: {plan.name}", "=" * 40]
 
         for i, week in enumerate(plan.weeks, 1):
             lines.append(f"\nWeek {i}:")
             lines.append("-" * 20)
 
-            # Weekday dinners
-            for day in Day.weekdays():
-                dish_uid = week.weekday_dinners.get(day)
+            for dish_uid in week.dishes:
                 dish_name = self._get_dish_name(dish_uid)
-                lines.append(f"  {day.value}: {dish_name}")
+                lines.append(f"  - {dish_name}")
 
-            # Weekend meals
-            for day in Day.weekend():
-                dish_uid = week.weekend_meals.get(day)
-                dish_name = self._get_dish_name(dish_uid)
-                lines.append(f"  {day.value}: {dish_name}")
+            if not week.dishes:
+                lines.append("  (no dishes)")
 
         return "\n".join(lines)
 
@@ -145,11 +139,12 @@ class AIAssistantService:
             return f"[Unknown: {dish_uid}]"
         return dish_result.unwrap().name
 
-    def suggest_plan(self, month: str) -> str | None:
-        """Use AI to suggest a monthly plan.
+    def suggest_plan(self, plan_name: str, weeks: int = 4) -> str | None:
+        """Use AI to suggest a meal plan.
 
         Args:
-            month: Month in format "YYYY-MM".
+            plan_name: Name for the plan.
+            weeks: Number of weeks to plan.
 
         Returns:
             AI suggestion text, or None if no AI client.
@@ -158,7 +153,7 @@ class AIAssistantService:
             return None
 
         system_prompt = self._get_system_prompt()
-        user_message = f"Please create a meal plan for {month}."
+        user_message = f"Please suggest a {weeks}-week meal plan called '{plan_name}'."
 
         response = self._ai_client.complete(
             prompt=user_message,

@@ -1,118 +1,478 @@
 {
-  "DISH-59137a22": {
-    "uid": "DISH-59137a22",
-    "name": "Kimchee Fried Rice",
-    "tags": [
-      "Eastern"
+  "DEFAULT-chi-mapo-tofu": {
+    "uid": "DEFAULT-chi-mapo-tofu",
+    "name": "Mapo Tofu",
+    "categories": [
+      "legumes",
+      "fermented",
+      "alliums"
     ],
-    "ingredient_uids": [
-      "ING-668aba6d",
-      "ING-8408ae8b",
-      "ING-a7fc5753"
-    ]
+    "cuisine": "chinese",
+    "tags": [],
+    "recipe_reference": "Silken tofu, doubanjiang, Sichuan peppercorns, scallions"
   },
-  "DISH-ee594650": {
-    "uid": "DISH-ee594650",
-    "name": "Shepherd's Pie",
-    "tags": [
-      "Western"
+  "DEFAULT-chi-vegetable-chow-mein": {
+    "uid": "DEFAULT-chi-vegetable-chow-mein",
+    "name": "Vegetable Chow Mein",
+    "categories": [
+      "grains",
+      "greens",
+      "alliums"
     ],
-    "ingredient_uids": [
-      "ING-39f1b795"
-    ]
+    "cuisine": "chinese",
+    "tags": [],
+    "recipe_reference": "Egg noodles, bok choy, cabbage, carrots, soy sauce"
   },
-  "DISH-c374e108": {
-    "uid": "DISH-c374e108",
-    "name": "Vegetable Stir Fry",
-    "tags": [
-      "Eastern"
+  "DEFAULT-chi-kung-pao-tofu": {
+    "uid": "DEFAULT-chi-kung-pao-tofu",
+    "name": "Kung Pao Tofu",
+    "categories": [
+      "legumes",
+      "alliums",
+      "seeds"
     ],
-    "ingredient_uids": [
-      "ING-57356940"
-    ]
+    "cuisine": "chinese",
+    "tags": [],
+    "recipe_reference": "Firm tofu, peanuts, dried chilies, Sichuan peppercorns"
   },
-  "DISH-dd5daf44": {
-    "uid": "DISH-dd5daf44",
-    "name": "Tofu Stir Fry",
-    "tags": [
-      "Eastern"
-    ],
-    "ingredient_uids": [
-      "ING-3d4ccf49",
-      "ING-112894e9",
-      "ING-d994fd03",
-      "ING-5c251d0c",
-      "ING-ca86a381",
-      "ING-928ba699"
-    ]
-  },
-  "DISH-c66bd680": {
-    "uid": "DISH-c66bd680",
-    "name": "Miso Soup",
-    "tags": [
-      "Eastern"
-    ],
-    "ingredient_uids": [
-      "ING-3d4ccf49",
-      "ING-72e7dc04",
-      "ING-ceefd596",
-      "ING-8af6470a"
-    ]
-  },
-  "DISH-c7f53e6b": {
-    "uid": "DISH-c7f53e6b",
+  "DEFAULT-chi-vegetable-fried-rice": {
+    "uid": "DEFAULT-chi-vegetable-fried-rice",
     "name": "Vegetable Fried Rice",
-    "tags": [
-      "Eastern"
+    "categories": [
+      "grains",
+      "greens",
+      "alliums"
     ],
-    "ingredient_uids": [
-      "ING-668aba6d",
-      "ING-112894e9",
-      "ING-ceefd596",
-      "ING-d994fd03",
-      "ING-5c251d0c",
-      "ING-ca86a381",
-      "ING-928ba699"
-    ]
+    "cuisine": "chinese",
+    "tags": [],
+    "recipe_reference": "Jasmine rice, eggs, peas, carrots, scallions"
   },
-  "DISH-c2b0cb45": {
-    "uid": "DISH-c2b0cb45",
-    "name": "Pad Thai",
-    "tags": [
-      "Eastern"
+  "DEFAULT-chi-hot-and-sour-soup": {
+    "uid": "DEFAULT-chi-hot-and-sour-soup",
+    "name": "Hot And Sour Soup",
+    "categories": [
+      "legumes",
+      "fermented",
+      "greens"
     ],
-    "ingredient_uids": [
-      "ING-80163e46",
-      "ING-3d4ccf49",
-      "ING-4700caeb",
-      "ING-ceefd596"
-    ]
+    "cuisine": "chinese",
+    "tags": [],
+    "recipe_reference": "Tofu, wood ear mushrooms, bamboo shoots, rice vinegar"
   },
-  "DISH-452267b4": {
-    "uid": "DISH-452267b4",
+  "DEFAULT-jap-miso-soup": {
+    "uid": "DEFAULT-jap-miso-soup",
+    "name": "Miso Soup",
+    "categories": [
+      "fermented",
+      "legumes",
+      "greens"
+    ],
+    "cuisine": "japanese",
+    "tags": [],
+    "recipe_reference": "White miso paste, silken tofu, wakame, scallions"
+  },
+  "DEFAULT-jap-vegetable-tempura": {
+    "uid": "DEFAULT-jap-vegetable-tempura",
+    "name": "Vegetable Tempura",
+    "categories": [
+      "root_veg",
+      "greens",
+      "grains"
+    ],
+    "cuisine": "japanese",
+    "tags": [],
+    "recipe_reference": "Sweet potato, kabocha, shiso leaves, tempura batter"
+  },
+  "DEFAULT-jap-agedashi-tofu": {
+    "uid": "DEFAULT-jap-agedashi-tofu",
+    "name": "Agedashi Tofu",
+    "categories": [
+      "legumes",
+      "grains",
+      "alliums"
+    ],
+    "cuisine": "japanese",
+    "tags": [],
+    "recipe_reference": "Silken tofu, dashi broth, grated daikon, scallions"
+  },
+  "DEFAULT-jap-japanese-curry": {
+    "uid": "DEFAULT-jap-japanese-curry",
+    "name": "Japanese Curry",
+    "categories": [
+      "root_veg",
+      "grains",
+      "alliums"
+    ],
+    "cuisine": "japanese",
+    "tags": [],
+    "recipe_reference": "Potato, carrots, onions, curry roux, rice"
+  },
+  "DEFAULT-kor-kimchi-fried-rice": {
+    "uid": "DEFAULT-kor-kimchi-fried-rice",
+    "name": "Kimchi Fried Rice",
+    "categories": [
+      "grains",
+      "fermented",
+      "alliums"
+    ],
+    "cuisine": "korean",
+    "tags": [],
+    "recipe_reference": "Short-grain rice, aged kimchi, gochujang, sesame oil"
+  },
+  "DEFAULT-kor-bibimbap": {
+    "uid": "DEFAULT-kor-bibimbap",
+    "name": "Bibimbap",
+    "categories": [
+      "grains",
+      "greens",
+      "fermented",
+      "seeds"
+    ],
+    "cuisine": "korean",
+    "tags": [],
+    "recipe_reference": "Rice, spinach, bean sprouts, gochujang, fried egg"
+  },
+  "DEFAULT-kor-japchae": {
+    "uid": "DEFAULT-kor-japchae",
+    "name": "Japchae",
+    "categories": [
+      "grains",
+      "greens",
+      "alliums",
+      "seeds"
+    ],
+    "cuisine": "korean",
+    "tags": [],
+    "recipe_reference": "Sweet potato noodles, spinach, carrots, sesame"
+  },
+  "DEFAULT-kor-sundubu-jjigae": {
+    "uid": "DEFAULT-kor-sundubu-jjigae",
+    "name": "Sundubu Jjigae",
+    "categories": [
+      "legumes",
+      "fermented",
+      "alliums"
+    ],
+    "cuisine": "korean",
+    "tags": [],
+    "recipe_reference": "Soft tofu, gochugaru, kimchi, scallions, egg"
+  },
+  "DEFAULT-kor-kimbap": {
+    "uid": "DEFAULT-kor-kimbap",
+    "name": "Kimbap",
+    "categories": [
+      "grains",
+      "greens",
+      "root_veg",
+      "seeds"
+    ],
+    "cuisine": "korean",
+    "tags": [],
+    "recipe_reference": "Sushi rice, spinach, pickled radish, carrots, seaweed"
+  },
+  "DEFAULT-tha-green-curry": {
+    "uid": "DEFAULT-tha-green-curry",
     "name": "Thai Green Curry",
-    "tags": [
-      "Eastern"
+    "categories": [
+      "greens",
+      "legumes",
+      "fresh_herbs"
     ],
-    "ingredient_uids": [
-      "ING-3d4ccf49",
-      "ING-a33994e4",
-      "ING-fb2f1093",
-      "ING-112894e9"
-    ]
+    "cuisine": "thai",
+    "tags": [],
+    "recipe_reference": "Coconut milk, green curry paste, tofu, Thai basil"
   },
-  "DISH-b81ec8d3": {
-    "uid": "DISH-b81ec8d3",
-    "name": "Edamame Buddha Bowl",
-    "tags": [
-      "Eastern"
+  "DEFAULT-tha-pad-thai": {
+    "uid": "DEFAULT-tha-pad-thai",
+    "name": "Pad Thai",
+    "categories": [
+      "grains",
+      "legumes",
+      "alliums",
+      "seeds"
     ],
-    "ingredient_uids": [
-      "ING-668aba6d",
-      "ING-d30c7cb5",
-      "ING-112894e9",
-      "ING-85f79a7e",
-      "ING-928ba699"
-    ]
+    "cuisine": "thai",
+    "tags": [],
+    "recipe_reference": "Rice noodles, tofu, bean sprouts, peanuts, lime"
+  },
+  "DEFAULT-tha-tom-yum-soup": {
+    "uid": "DEFAULT-tha-tom-yum-soup",
+    "name": "Tom Yum Soup",
+    "categories": [
+      "greens",
+      "fresh_herbs",
+      "alliums"
+    ],
+    "cuisine": "thai",
+    "tags": [],
+    "recipe_reference": "Lemongrass, galangal, kaffir lime, mushrooms, tofu"
+  },
+  "DEFAULT-tha-massaman-curry": {
+    "uid": "DEFAULT-tha-massaman-curry",
+    "name": "Massaman Curry",
+    "categories": [
+      "root_veg",
+      "legumes",
+      "seeds"
+    ],
+    "cuisine": "thai",
+    "tags": [],
+    "recipe_reference": "Coconut milk, potatoes, tofu, peanuts, massaman paste"
+  },
+  "DEFAULT-vie-pho-chay": {
+    "uid": "DEFAULT-vie-pho-chay",
+    "name": "Pho Chay",
+    "categories": [
+      "grains",
+      "greens",
+      "fresh_herbs",
+      "alliums"
+    ],
+    "cuisine": "vietnamese",
+    "tags": [],
+    "recipe_reference": "Rice noodles, vegetable broth, tofu, Thai basil, bean sprouts"
+  },
+  "DEFAULT-vie-banh-mi-chay": {
+    "uid": "DEFAULT-vie-banh-mi-chay",
+    "name": "Banh Mi Chay",
+    "categories": [
+      "grains",
+      "legumes",
+      "root_veg",
+      "fresh_herbs"
+    ],
+    "cuisine": "vietnamese",
+    "tags": [],
+    "recipe_reference": "Baguette, lemongrass tofu, pickled carrots, cilantro"
+  },
+  "DEFAULT-vie-fresh-spring-rolls": {
+    "uid": "DEFAULT-vie-fresh-spring-rolls",
+    "name": "Fresh Spring Rolls",
+    "categories": [
+      "grains",
+      "greens",
+      "fresh_herbs"
+    ],
+    "cuisine": "vietnamese",
+    "tags": [],
+    "recipe_reference": "Rice paper, vermicelli, lettuce, mint, peanut sauce"
+  },
+  "DEFAULT-ind-dal-tadka": {
+    "uid": "DEFAULT-ind-dal-tadka",
+    "name": "Dal Tadka",
+    "categories": [
+      "legumes",
+      "alliums",
+      "fresh_herbs"
+    ],
+    "cuisine": "indian",
+    "tags": [],
+    "recipe_reference": "Yellow lentils, cumin, garlic, cilantro, ghee"
+  },
+  "DEFAULT-ind-palak-paneer": {
+    "uid": "DEFAULT-ind-palak-paneer",
+    "name": "Palak Paneer",
+    "categories": [
+      "greens",
+      "dairy",
+      "alliums"
+    ],
+    "cuisine": "indian",
+    "tags": [],
+    "recipe_reference": "Spinach puree, paneer, cream, garam masala"
+  },
+  "DEFAULT-ind-chana-masala": {
+    "uid": "DEFAULT-ind-chana-masala",
+    "name": "Chana Masala",
+    "categories": [
+      "legumes",
+      "alliums",
+      "fresh_herbs"
+    ],
+    "cuisine": "indian",
+    "tags": [],
+    "recipe_reference": "Chickpeas, tomatoes, onions, garam masala, cilantro"
+  },
+  "DEFAULT-ind-aloo-gobi": {
+    "uid": "DEFAULT-ind-aloo-gobi",
+    "name": "Aloo Gobi",
+    "categories": [
+      "root_veg",
+      "cruciferous",
+      "alliums"
+    ],
+    "cuisine": "indian",
+    "tags": [],
+    "recipe_reference": "Potatoes, cauliflower, turmeric, cumin, ginger"
+  },
+  "DEFAULT-ind-vegetable-biryani": {
+    "uid": "DEFAULT-ind-vegetable-biryani",
+    "name": "Vegetable Biryani",
+    "categories": [
+      "grains",
+      "root_veg",
+      "alliums",
+      "fresh_herbs"
+    ],
+    "cuisine": "indian",
+    "tags": [],
+    "recipe_reference": "Basmati rice, mixed vegetables, saffron, fried onions"
+  },
+  "DEFAULT-med-falafel-wrap": {
+    "uid": "DEFAULT-med-falafel-wrap",
+    "name": "Falafel Wrap",
+    "categories": [
+      "legumes",
+      "greens",
+      "grains",
+      "fresh_herbs"
+    ],
+    "cuisine": "mediterranean",
+    "tags": [],
+    "recipe_reference": "Chickpea falafel, pita, tahini, lettuce, tomatoes"
+  },
+  "DEFAULT-med-greek-salad": {
+    "uid": "DEFAULT-med-greek-salad",
+    "name": "Greek Salad",
+    "categories": [
+      "greens",
+      "dairy",
+      "alliums"
+    ],
+    "cuisine": "mediterranean",
+    "tags": [],
+    "recipe_reference": "Cucumber, tomatoes, feta, olives, red onion"
+  },
+  "DEFAULT-med-shakshuka": {
+    "uid": "DEFAULT-med-shakshuka",
+    "name": "Shakshuka",
+    "categories": [
+      "legumes",
+      "alliums",
+      "fresh_herbs"
+    ],
+    "cuisine": "mediterranean",
+    "tags": [],
+    "recipe_reference": "Poached eggs, tomato sauce, bell peppers, cumin"
+  },
+  "DEFAULT-med-hummus-plate": {
+    "uid": "DEFAULT-med-hummus-plate",
+    "name": "Hummus Plate",
+    "categories": [
+      "legumes",
+      "seeds",
+      "grains"
+    ],
+    "cuisine": "mediterranean",
+    "tags": [],
+    "recipe_reference": "Chickpea hummus, pita, olive oil, pine nuts"
+  },
+  "DEFAULT-ita-margherita-pizza": {
+    "uid": "DEFAULT-ita-margherita-pizza",
+    "name": "Margherita Pizza",
+    "categories": [
+      "grains",
+      "dairy",
+      "fresh_herbs"
+    ],
+    "cuisine": "italian",
+    "tags": [],
+    "recipe_reference": "Pizza dough, tomato sauce, mozzarella, fresh basil"
+  },
+  "DEFAULT-ita-pasta-primavera": {
+    "uid": "DEFAULT-ita-pasta-primavera",
+    "name": "Pasta Primavera",
+    "categories": [
+      "grains",
+      "greens",
+      "alliums"
+    ],
+    "cuisine": "italian",
+    "tags": [],
+    "recipe_reference": "Penne, zucchini, bell peppers, cherry tomatoes, garlic"
+  },
+  "DEFAULT-ita-caprese-salad": {
+    "uid": "DEFAULT-ita-caprese-salad",
+    "name": "Caprese Salad",
+    "categories": [
+      "dairy",
+      "fresh_herbs"
+    ],
+    "cuisine": "italian",
+    "tags": [],
+    "recipe_reference": "Fresh mozzarella, tomatoes, basil, balsamic glaze"
+  },
+  "DEFAULT-mex-black-bean-tacos": {
+    "uid": "DEFAULT-mex-black-bean-tacos",
+    "name": "Black Bean Tacos",
+    "categories": [
+      "legumes",
+      "grains",
+      "greens",
+      "alliums"
+    ],
+    "cuisine": "mexican",
+    "tags": [],
+    "recipe_reference": "Corn tortillas, black beans, cabbage, salsa, lime"
+  },
+  "DEFAULT-mex-veggie-burrito-bowl": {
+    "uid": "DEFAULT-mex-veggie-burrito-bowl",
+    "name": "Veggie Burrito Bowl",
+    "categories": [
+      "grains",
+      "legumes",
+      "greens"
+    ],
+    "cuisine": "mexican",
+    "tags": [],
+    "recipe_reference": "Cilantro lime rice, black beans, corn, guacamole"
+  },
+  "DEFAULT-mex-cheese-quesadilla": {
+    "uid": "DEFAULT-mex-cheese-quesadilla",
+    "name": "Cheese Quesadilla",
+    "categories": [
+      "grains",
+      "dairy",
+      "alliums"
+    ],
+    "cuisine": "mexican",
+    "tags": [],
+    "recipe_reference": "Flour tortilla, cheddar, peppers, onions, salsa"
+  },
+  "DEFAULT-fre-french-onion-soup": {
+    "uid": "DEFAULT-fre-french-onion-soup",
+    "name": "French Onion Soup",
+    "categories": [
+      "alliums",
+      "grains",
+      "dairy"
+    ],
+    "cuisine": "french",
+    "tags": [],
+    "recipe_reference": "Caramelized onions, vegetable broth, crusty bread, gruyere"
+  },
+  "DEFAULT-ame-mac-and-cheese": {
+    "uid": "DEFAULT-ame-mac-and-cheese",
+    "name": "Mac And Cheese",
+    "categories": [
+      "grains",
+      "dairy"
+    ],
+    "cuisine": "american",
+    "tags": [],
+    "recipe_reference": "Elbow pasta, cheddar cheese sauce, breadcrumbs"
+  },
+  "DISH-81ea34e6": {
+    "uid": "DISH-81ea34e6",
+    "name": "Soupy Noodles",
+    "categories": [
+      "legumes",
+      "grains",
+      "alliums",
+      "cruciferous"
+    ],
+    "cuisine": "japanese",
+    "tags": [],
+    "recipe_reference": ""
   }
 }

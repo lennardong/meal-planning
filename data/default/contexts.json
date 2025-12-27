@@ -18,5 +18,25 @@
     "uid": "CTX-e8a9666a",
     "category": "location",
     "context": "We live in Singapore. Local Asian ingredients are easy to find."
+  },
+  "CTX-88226ed6": {
+    "uid": "CTX-88226ed6",
+    "category": "dietary",
+    "context": "We are vegetarian. We do not eat any meat, but do eat dairy and eggs."
+  },
+  "CTX-d5abf598": {
+    "uid": "CTX-d5abf598",
+    "category": "location",
+    "context": "We live in Johor Bahru, Malaysia. We prefer local ingredients."
+  },
+  "CTX-d689432a": {
+    "uid": "CTX-d689432a",
+    "category": "dietary",
+    "context": "We are vegetarian. We do not eat any meat, but do eat dairy and eggs."
+  },
+  "CTX-e9c8d11f": {
+    "uid": "CTX-e9c8d11f",
+    "category": "location",
+    "context": "We live in Johor Bahru, Malaysia. We prefer local ingredients."
   }
 }

@@ -18,7 +18,6 @@ from meal_planning.infra.config import get_data_path, get_user_id
 from meal_planning.services.catalogue import CatalogueService
 from meal_planning.services.planning import PlanningService
 from meal_planning.services.context import ContextService
-from meal_planning.services.shopping import ShoppingService
 from meal_planning.services.analysis import AnalysisService
 from meal_planning.services.ai_assistant import AIAssistantService
 
@@ -33,7 +32,6 @@ class AppContext:
     catalogue: CatalogueService
     planning: PlanningService
     context: ContextService
-    shopping: ShoppingService
     analysis: AnalysisService
     ai_assistant: AIAssistantService
 
@@ -76,7 +74,6 @@ def create_app_context(
     context = ContextService(store, user_id)
 
     # Create orchestrating services
-    shopping = ShoppingService(catalogue, planning)
     analysis = AnalysisService(catalogue, planning)
     ai_assistant = AIAssistantService(catalogue, planning, context, ai_client)
 
@@ -84,7 +81,6 @@ def create_app_context(
         catalogue=catalogue,
         planning=planning,
         context=context,
-        shopping=shopping,
         analysis=analysis,
         ai_assistant=ai_assistant,
     )

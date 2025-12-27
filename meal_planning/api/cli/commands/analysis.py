@@ -25,26 +25,36 @@ def get_services():
 
 @app.command("variety")
 def variety(
-    month: str = typer.Argument(..., help="Month in format YYYY-MM"),
+    plan: str = typer.Argument(..., help="Plan name or UID"),
 ):
-    """Analyze variety in a month's meal plan."""
+    """Analyze variety in a meal plan."""
     ctx = get_services()
 
-    report = ctx.analysis.get_variety_report(month)
+    report = ctx.analysis.get_variety_report(plan)
 
     if report is None:
-        console.print(f"[yellow]No plan found for {month}[/yellow]")
+        console.print(f"[yellow]No plan found: {plan}[/yellow]")
         return
 
-    console.print(f"\n[bold]Variety Report for {month}[/bold]\n")
+    console.print(f"\n[bold]Variety Report for {plan}[/bold]\n")
     console.print(f"Variety Score: [bold]{report.variety_score}/100[/bold]")
     console.print(f"Unique Dishes: {report.unique_dish_count}")
-    console.print(f"Total Scheduled: {report.total_scheduled_count}")
+    console.print(f"Total Dishes: {report.total_dish_count}")
 
-    if report.tag_distribution:
-        console.print("\n[bold]Tag Distribution:[/bold]")
-        for tag, count in report.tag_distribution.items():
-            console.print(f"  {tag}: {count}")
+    if report.cuisine_distribution:
+        console.print("\n[bold]Cuisine Distribution:[/bold]")
+        for cuisine, count in report.cuisine_distribution.items():
+            console.print(f"  {cuisine}: {count}")
+
+    if report.region_distribution:
+        console.print("\n[bold]Region Distribution:[/bold]")
+        for region, count in report.region_distribution.items():
+            console.print(f"  {region}: {count}")
+
+    if report.category_distribution:
+        console.print("\n[bold]Category Distribution:[/bold]")
+        for category, count in sorted(report.category_distribution.items(), key=lambda x: -x[1]):
+            console.print(f"  {category}: {count}")
 
     if report.repeated_dishes:
         console.print("\n[bold yellow]Repeated Dishes (>2 times):[/bold yellow]")
@@ -56,18 +66,18 @@ def variety(
 
 @app.command("suggest")
 def suggest(
-    month: str = typer.Argument(..., help="Month in format YYYY-MM"),
+    plan: str = typer.Argument(..., help="Plan name or UID"),
 ):
     """Get improvement suggestions for a meal plan."""
     ctx = get_services()
 
-    suggestions = ctx.analysis.get_suggestions(month)
+    suggestions = ctx.analysis.get_suggestions(plan)
 
     if suggestions is None:
-        console.print(f"[yellow]No plan found for {month}[/yellow]")
+        console.print(f"[yellow]No plan found: {plan}[/yellow]")
         return
 
-    console.print(f"\n[bold]Suggestions for {month}[/bold]\n")
+    console.print(f"\n[bold]Suggestions for {plan}[/bold]\n")
 
     if not suggestions:
         console.print("[green]No issues found. Great variety![/green]")

@@ -9,10 +9,8 @@ from __future__ import annotations
 import typer
 from rich.console import Console
 
-from meal_planning.api.cli.commands import catalogue, planning, shopping, analysis, context
-from meal_planning.core.catalogue.models import VOIngredient, VODish
-from meal_planning.core.catalogue.enums import PurchaseType, IngredientTag, DishTag
-from meal_planning.core.context.models import VOUserContext
+from meal_planning.api.cli.commands import catalogue, planning, analysis, context
+from meal_planning.core.context.models import UserContext
 
 app = typer.Typer(
     name="meal",
@@ -24,72 +22,23 @@ console = Console()
 # Register subcommand groups
 app.add_typer(catalogue.app, name="catalogue")
 app.add_typer(planning.app, name="plan")
-app.add_typer(shopping.app, name="shop")
 app.add_typer(analysis.app, name="analysis")
 app.add_typer(context.app, name="context")
 
 
 @app.command()
 def seed():
-    """Seed the database with sample data."""
+    """Seed sample user contexts (dishes are auto-loaded as defaults)."""
     from meal_planning.app import get_app_context
 
     ctx = get_app_context()
 
-    # Add ingredients
-    rice = VOIngredient(
-        name="Rice", tags=(IngredientTag.GRAIN,), purchase_type=PurchaseType.BULK
-    )
-    potato = VOIngredient(
-        name="Potato", tags=(IngredientTag.VEGETABLE,), purchase_type=PurchaseType.BULK
-    )
-    spinach = VOIngredient(
-        name="Spinach",
-        tags=(IngredientTag.VEGETABLE,),
-        purchase_type=PurchaseType.WEEKLY,
-    )
-    eggs = VOIngredient(
-        name="Eggs", tags=(IngredientTag.PROTEIN,), purchase_type=PurchaseType.WEEKLY
-    )
-    kimchi = VOIngredient(
-        name="Kimchi",
-        tags=(IngredientTag.VEGETABLE,),
-        purchase_type=PurchaseType.WEEKLY,
-    )
-
-    for ing in [rice, potato, spinach, eggs, kimchi]:
-        ctx.catalogue.add_ingredient(ing)
-    ctx.catalogue.save()
-    console.print("[green]Added 5 sample ingredients[/green]")
-
-    # Add dishes
-    fried_rice = VODish(
-        name="Kimchee Fried Rice",
-        tags=(DishTag.EASTERN,),
-        ingredient_uids=(rice.uid, kimchi.uid, eggs.uid),
-    )
-    shepherds_pie = VODish(
-        name="Shepherd's Pie",
-        tags=(DishTag.WESTERN,),
-        ingredient_uids=(potato.uid,),
-    )
-    stir_fry = VODish(
-        name="Vegetable Stir Fry",
-        tags=(DishTag.EASTERN,),
-        ingredient_uids=(spinach.uid,),
-    )
-
-    for dish in [fried_rice, shepherds_pie, stir_fry]:
-        ctx.catalogue.add_dish(dish)
-    ctx.catalogue.save()
-    console.print("[green]Added 3 sample dishes[/green]")
-
-    # Add contexts
-    vegetarian = VOUserContext(
+    # Add sample user contexts
+    vegetarian = UserContext(
         category="dietary",
         context="We are vegetarian. We do not eat any meat, but do eat dairy and eggs.",
     )
-    location = VOUserContext(
+    location = UserContext(
         category="location",
         context="We live in Johor Bahru, Malaysia. We prefer local ingredients.",
     )
@@ -99,7 +48,31 @@ def seed():
     ctx.context.save()
     console.print("[green]Added 2 sample contexts[/green]")
 
+    # Show dish count (defaults are auto-loaded)
+    dish_count = len(ctx.catalogue.list_dishes())
+    console.print(f"[dim]Catalogue has {dish_count} dishes (defaults auto-loaded)[/dim]")
+
     console.print("\n[bold green]Seed complete![/bold green]")
+
+
+@app.command()
+def reset(
+    full: bool = typer.Option(
+        False, "--full", help="Also remove user-created dishes"
+    ),
+):
+    """Reset catalogue to default dishes."""
+    from meal_planning.app import get_app_context
+
+    ctx = get_app_context()
+
+    before = len(ctx.catalogue.list_dishes())
+    count = ctx.catalogue.reset_to_defaults(keep_user_additions=not full)
+
+    if full:
+        console.print(f"[green]Full reset: {before} -> {count} dishes[/green]")
+    else:
+        console.print(f"[green]Reset: {before} -> {count} dishes (kept user additions)[/green]")
 
 
 @app.command()
@@ -145,6 +118,37 @@ def status():
     console.print(f"  Old format exists: {status['old_format_exists']}")
     console.print(f"  New format exists: {status['new_format_exists']}")
     console.print(f"  Needs migration: {status['needs_migration']}")
+
+
+@app.command()
+def web(
+    port: int = typer.Option(8501, "--port", "-p", help="Port to run on"),
+):
+    """Launch the Streamlit web interface."""
+    import subprocess
+    import sys
+    from pathlib import Path
+
+    app_path = Path(__file__).parent.parent / "web" / "app.py"
+    console.print(f"[green]Starting web app at http://localhost:{port}[/green]")
+    subprocess.run([
+        sys.executable, "-m", "streamlit", "run",
+        str(app_path),
+        "--server.port", str(port),
+        "--server.headless", "true",
+    ])
+
+
+@app.command()
+def dash(
+    port: int = typer.Option(8050, "--port", "-p", help="Port to run on"),
+    debug: bool = typer.Option(False, "--debug", help="Enable debug mode"),
+):
+    """Launch the Dash web interface (Mantine UI)."""
+    from meal_planning.api.dash.app import app as dash_app
+
+    console.print(f"[green]Starting Dash app at http://localhost:{port}[/green]")
+    dash_app.run(debug=debug, port=port)
 
 
 def main():

@@ -1,59 +1,907 @@
 {
-  "PLAN-2025-01": {
-    "uid": "PLAN-2025-01",
-    "month": "2025-01",
+  "PLAN-c5cf1b93": {
+    "uid": "PLAN-c5cf1b93",
+    "name": "Generated Plan",
     "weeks": [
       {
-        "weekday_dinners": {
-          "Mon": "DISH-dd5daf44",
-          "Tue": "DISH-c66bd680",
-          "Wed": "DISH-c7f53e6b",
-          "Thu": "DISH-c2b0cb45",
-          "Fri": "DISH-452267b4"
-        },
-        "weekend_meals": {
-          "Sat": "DISH-b81ec8d3",
-          "Sun": null
-        }
+        "dishes": [
+          "DEFAULT-kor-japchae",
+          "DEFAULT-jap-miso-soup"
+        ]
       },
       {
-        "weekday_dinners": {
-          "Mon": null,
-          "Tue": null,
-          "Wed": null,
-          "Thu": null,
-          "Fri": null
-        },
-        "weekend_meals": {
-          "Sat": null,
-          "Sun": null
-        }
+        "dishes": [
+          "DEFAULT-jap-edamame-buddha-bowl",
+          "DEFAULT-chi-mapo-tofu"
+        ]
       },
       {
-        "weekday_dinners": {
-          "Mon": null,
-          "Tue": null,
-          "Wed": null,
-          "Thu": null,
-          "Fri": null
-        },
-        "weekend_meals": {
-          "Sat": null,
-          "Sun": null
-        }
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-chi-kung-pao-tofu"
+        ]
       },
       {
-        "weekday_dinners": {
-          "Mon": null,
-          "Tue": null,
-          "Wed": null,
-          "Thu": null,
-          "Fri": null
-        },
-        "weekend_meals": {
-          "Sat": null,
-          "Sun": null
-        }
+        "dishes": [
+          "DEFAULT-tha-massaman-curry",
+          "DEFAULT-jap-agedashi-tofu"
+        ]
+      }
+    ]
+  },
+  "PLAN-968212af": {
+    "uid": "PLAN-968212af",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-japchae",
+          "DEFAULT-jap-miso-soup"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-jap-edamame-buddha-bowl",
+          "DEFAULT-chi-mapo-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-chi-kung-pao-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-tha-massaman-curry",
+          "DEFAULT-jap-agedashi-tofu"
+        ]
+      }
+    ]
+  },
+  "PLAN-f17729ef": {
+    "uid": "PLAN-f17729ef",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-japchae",
+          "DEFAULT-jap-miso-soup"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-jap-edamame-buddha-bowl",
+          "DEFAULT-chi-mapo-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-chi-kung-pao-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-tha-massaman-curry",
+          "DEFAULT-jap-agedashi-tofu"
+        ]
+      }
+    ]
+  },
+  "PLAN-5338a31d": {
+    "uid": "PLAN-5338a31d",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-japchae",
+          "DEFAULT-jap-miso-soup"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-jap-edamame-buddha-bowl",
+          "DEFAULT-chi-mapo-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-chi-kung-pao-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-tha-massaman-curry",
+          "DEFAULT-jap-agedashi-tofu"
+        ]
+      }
+    ]
+  },
+  "PLAN-e8db8a62": {
+    "uid": "PLAN-e8db8a62",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-japchae",
+          "DEFAULT-jap-miso-soup"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-jap-edamame-buddha-bowl",
+          "DEFAULT-chi-mapo-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-chi-kung-pao-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-tha-massaman-curry",
+          "DEFAULT-jap-agedashi-tofu"
+        ]
+      }
+    ]
+  },
+  "PLAN-4f94dacd": {
+    "uid": "PLAN-4f94dacd",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-japchae",
+          "DEFAULT-jap-miso-soup"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-jap-edamame-buddha-bowl",
+          "DEFAULT-chi-mapo-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-chi-kung-pao-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-tha-massaman-curry",
+          "DEFAULT-jap-agedashi-tofu"
+        ]
+      }
+    ]
+  },
+  "PLAN-fa98c2fc": {
+    "uid": "PLAN-fa98c2fc",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-japchae",
+          "DEFAULT-jap-miso-soup"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-jap-edamame-buddha-bowl",
+          "DEFAULT-chi-mapo-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-chi-kung-pao-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-tha-massaman-curry",
+          "DEFAULT-jap-agedashi-tofu"
+        ]
+      }
+    ]
+  },
+  "PLAN-f8a49183": {
+    "uid": "PLAN-f8a49183",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-japchae",
+          "DEFAULT-jap-miso-soup"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-jap-edamame-buddha-bowl",
+          "DEFAULT-chi-mapo-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-chi-kung-pao-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-tha-massaman-curry",
+          "DEFAULT-jap-agedashi-tofu"
+        ]
+      }
+    ]
+  },
+  "PLAN-5468f3c6": {
+    "uid": "PLAN-5468f3c6",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-japchae",
+          "DEFAULT-jap-miso-soup"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-jap-edamame-buddha-bowl",
+          "DEFAULT-chi-mapo-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-chi-kung-pao-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-tha-massaman-curry",
+          "DEFAULT-jap-agedashi-tofu"
+        ]
+      }
+    ]
+  },
+  "PLAN-e587bd25": {
+    "uid": "PLAN-e587bd25",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-japchae",
+          "DEFAULT-jap-miso-soup"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-jap-edamame-buddha-bowl",
+          "DEFAULT-chi-mapo-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-chi-kung-pao-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-tha-massaman-curry",
+          "DEFAULT-jap-agedashi-tofu"
+        ]
+      }
+    ]
+  },
+  "PLAN-dd9f0a80": {
+    "uid": "PLAN-dd9f0a80",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-japchae",
+          "DEFAULT-jap-miso-soup"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-jap-edamame-buddha-bowl",
+          "DEFAULT-chi-mapo-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-chi-kung-pao-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-tha-massaman-curry",
+          "DEFAULT-jap-agedashi-tofu"
+        ]
+      }
+    ]
+  },
+  "PLAN-e417881b": {
+    "uid": "PLAN-e417881b",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-japchae",
+          "DEFAULT-jap-miso-soup"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-jap-edamame-buddha-bowl",
+          "DEFAULT-chi-mapo-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-chi-kung-pao-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-tha-massaman-curry",
+          "DEFAULT-jap-agedashi-tofu"
+        ]
+      }
+    ]
+  },
+  "PLAN-40c59454": {
+    "uid": "PLAN-40c59454",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-jap-japanese-curry"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-tha-tom-yum-soup",
+          "DEFAULT-tha-green-curry"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-jap-japanese-curry"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-tha-tom-yum-soup"
+        ]
+      }
+    ]
+  },
+  "PLAN-8fb97cbe": {
+    "uid": "PLAN-8fb97cbe",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-japchae",
+          "DEFAULT-tha-massaman-curry"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-jap-japanese-curry",
+          "DEFAULT-kor-japchae"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-japchae",
+          "DEFAULT-tha-massaman-curry"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-jap-japanese-curry",
+          "DEFAULT-kor-japchae"
+        ]
+      }
+    ]
+  },
+  "PLAN-f597f179": {
+    "uid": "PLAN-f597f179",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-tha-pad-thai",
+          "DEFAULT-vie-pho-chay",
+          "DEFAULT-med-falafel-wrap",
+          "DEFAULT-mex-black-bean-tacos"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-vie-banh-mi-chay",
+          "DEFAULT-chi-hot-and-sour-soup",
+          "DEFAULT-mex-black-bean-tacos",
+          "DEFAULT-med-falafel-wrap"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-jap-japanese-curry",
+          "DEFAULT-jap-miso-soup",
+          "DEFAULT-med-falafel-wrap",
+          "DEFAULT-mex-black-bean-tacos"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-ind-dal-tadka",
+          "DEFAULT-tha-pad-thai",
+          "DEFAULT-med-falafel-wrap",
+          "DEFAULT-mex-black-bean-tacos"
+        ]
+      }
+    ]
+  },
+  "PLAN-d64452e1": {
+    "uid": "PLAN-d64452e1",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-tha-pad-thai",
+          "DEFAULT-jap-vegetable-tempura",
+          "DEFAULT-fre-french-onion-soup",
+          "DEFAULT-ita-pasta-primavera"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-chi-mapo-tofu",
+          "DEFAULT-tha-massaman-curry",
+          "DEFAULT-mex-veggie-burrito-bowl",
+          "DEFAULT-fre-french-onion-soup"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-chi-vegetable-fried-rice",
+          "DEFAULT-tha-pad-thai",
+          "DEFAULT-ita-pasta-primavera",
+          "DEFAULT-fre-french-onion-soup"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-chi-mapo-tofu",
+          "DEFAULT-jap-vegetable-tempura",
+          "DEFAULT-mex-veggie-burrito-bowl",
+          "DEFAULT-fre-french-onion-soup"
+        ]
+      }
+    ]
+  },
+  "PLAN-96c30627": {
+    "uid": "PLAN-96c30627",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-ind-vegetable-biryani",
+          "DEFAULT-chi-mapo-tofu",
+          "DEFAULT-med-greek-salad",
+          "DEFAULT-med-hummus-plate"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-ind-dal-tadka",
+          "DEFAULT-ind-aloo-gobi",
+          "DEFAULT-mex-veggie-burrito-bowl",
+          "DEFAULT-med-falafel-wrap"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-ind-vegetable-biryani",
+          "DEFAULT-chi-mapo-tofu",
+          "DEFAULT-med-greek-salad",
+          "DEFAULT-med-hummus-plate"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-ind-vegetable-biryani",
+          "DEFAULT-chi-mapo-tofu",
+          "DEFAULT-med-greek-salad",
+          "DEFAULT-mex-veggie-burrito-bowl"
+        ]
+      }
+    ]
+  },
+  "PLAN-3c7b5dfd": {
+    "uid": "PLAN-3c7b5dfd",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-vie-banh-mi-chay",
+          "DEFAULT-chi-mapo-tofu",
+          "DEFAULT-tha-green-curry"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-japchae",
+          "DEFAULT-tha-massaman-curry",
+          "DEFAULT-vie-pho-chay",
+          "DEFAULT-kor-sundubu-jjigae"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-kimbap",
+          "DEFAULT-ind-dal-tadka",
+          "DEFAULT-tha-pad-thai",
+          "DEFAULT-vie-fresh-spring-rolls"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-tha-tom-yum-soup",
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-vie-banh-mi-chay",
+          "DEFAULT-chi-mapo-tofu"
+        ]
+      }
+    ]
+  },
+  "PLAN-e4e47d6b": {
+    "uid": "PLAN-e4e47d6b",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-vie-banh-mi-chay",
+          "DEFAULT-ita-margherita-pizza",
+          "DEFAULT-med-falafel-wrap"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-japchae",
+          "DEFAULT-chi-mapo-tofu",
+          "DEFAULT-ita-margherita-pizza",
+          "DEFAULT-med-falafel-wrap"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-kimbap",
+          "DEFAULT-ind-dal-tadka",
+          "DEFAULT-ita-margherita-pizza",
+          "DEFAULT-med-falafel-wrap"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-tha-pad-thai",
+          "DEFAULT-vie-pho-chay",
+          "DEFAULT-ita-margherita-pizza",
+          "DEFAULT-med-falafel-wrap"
+        ]
+      }
+    ]
+  },
+  "PLAN-20a5e648": {
+    "uid": "PLAN-20a5e648",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-chi-mapo-tofu",
+          "DEFAULT-med-falafel-wrap",
+          "DEFAULT-med-greek-salad"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-japchae",
+          "DEFAULT-kor-sundubu-jjigae",
+          "DEFAULT-med-falafel-wrap",
+          "DEFAULT-med-greek-salad"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-kimbap",
+          "DEFAULT-jap-agedashi-tofu",
+          "DEFAULT-med-falafel-wrap",
+          "DEFAULT-med-greek-salad"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-kimchi-fried-rice",
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-med-falafel-wrap",
+          "DEFAULT-med-greek-salad"
+        ]
+      }
+    ]
+  },
+  "PLAN-22c63aa6": {
+    "uid": "PLAN-22c63aa6",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DISH-81ea34e6",
+          "DEFAULT-ita-margherita-pizza",
+          "DEFAULT-med-greek-salad"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-chi-mapo-tofu",
+          "DEFAULT-jap-vegetable-tempura",
+          "DEFAULT-ita-margherita-pizza",
+          "DEFAULT-med-greek-salad"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-chi-vegetable-chow-mein",
+          "DEFAULT-chi-kung-pao-tofu",
+          "DEFAULT-ita-margherita-pizza",
+          "DEFAULT-med-greek-salad"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-kimchi-fried-rice",
+          "DEFAULT-chi-vegetable-fried-rice",
+          "DEFAULT-ita-margherita-pizza",
+          "DEFAULT-med-greek-salad"
+        ]
+      }
+    ]
+  },
+  "PLAN-00d0bcb8": {
+    "uid": "PLAN-00d0bcb8",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DISH-81ea34e6",
+          "DEFAULT-ita-margherita-pizza",
+          "DEFAULT-med-greek-salad"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-chi-mapo-tofu",
+          "DEFAULT-jap-vegetable-tempura",
+          "DEFAULT-ita-margherita-pizza",
+          "DEFAULT-med-greek-salad"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-chi-vegetable-chow-mein",
+          "DEFAULT-chi-kung-pao-tofu",
+          "DEFAULT-ita-margherita-pizza",
+          "DEFAULT-med-greek-salad"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-kimchi-fried-rice",
+          "DEFAULT-chi-vegetable-fried-rice",
+          "DEFAULT-ita-margherita-pizza",
+          "DEFAULT-med-greek-salad"
+        ]
+      }
+    ]
+  },
+  "PLAN-2dd4d704": {
+    "uid": "PLAN-2dd4d704",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DISH-81ea34e6",
+          "DEFAULT-ita-margherita-pizza",
+          "DEFAULT-med-greek-salad"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-chi-mapo-tofu",
+          "DEFAULT-jap-vegetable-tempura",
+          "DEFAULT-med-shakshuka",
+          "DEFAULT-ita-margherita-pizza"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-chi-vegetable-chow-mein",
+          "DEFAULT-chi-kung-pao-tofu",
+          "DEFAULT-ita-margherita-pizza",
+          "DEFAULT-med-greek-salad"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-kimchi-fried-rice",
+          "DEFAULT-chi-vegetable-fried-rice",
+          "DEFAULT-med-shakshuka",
+          "DEFAULT-ita-margherita-pizza"
+        ]
+      }
+    ]
+  },
+  "PLAN-4cd23c9b": {
+    "uid": "PLAN-4cd23c9b",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-chi-mapo-tofu",
+          "DEFAULT-chi-mapo-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-chi-mapo-tofu",
+          "DEFAULT-chi-mapo-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-chi-mapo-tofu",
+          "DEFAULT-chi-mapo-tofu"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-chi-mapo-tofu",
+          "DEFAULT-chi-mapo-tofu"
+        ]
+      }
+    ]
+  },
+  "PLAN-a4d5becd": {
+    "uid": "PLAN-a4d5becd",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-chi-mapo-tofu",
+          "DEFAULT-fre-french-onion-soup",
+          "DEFAULT-mex-cheese-quesadilla"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-jap-miso-soup",
+          "DEFAULT-kor-kimchi-fried-rice",
+          "DEFAULT-fre-french-onion-soup",
+          "DEFAULT-mex-cheese-quesadilla"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-kor-bibimbap",
+          "DEFAULT-chi-mapo-tofu",
+          "DEFAULT-fre-french-onion-soup",
+          "DEFAULT-mex-cheese-quesadilla"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-jap-miso-soup",
+          "DEFAULT-kor-kimchi-fried-rice",
+          "DEFAULT-fre-french-onion-soup",
+          "DEFAULT-mex-cheese-quesadilla"
+        ]
+      }
+    ]
+  },
+  "PLAN-8353ffe3": {
+    "uid": "PLAN-8353ffe3",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-tha-pad-thai",
+          "DEFAULT-vie-pho-chay",
+          "DEFAULT-med-shakshuka",
+          "DEFAULT-med-shakshuka"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-tha-massaman-curry",
+          "DEFAULT-vie-pho-chay",
+          "DEFAULT-med-shakshuka",
+          "DEFAULT-med-shakshuka"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-tha-pad-thai",
+          "DEFAULT-vie-pho-chay",
+          "DEFAULT-med-shakshuka",
+          "DEFAULT-med-shakshuka"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-tha-massaman-curry",
+          "DEFAULT-vie-pho-chay",
+          "DEFAULT-med-shakshuka",
+          "DEFAULT-med-shakshuka"
+        ]
+      }
+    ]
+  },
+  "PLAN-35969a13": {
+    "uid": "PLAN-35969a13",
+    "name": "Generated Plan",
+    "weeks": [
+      {
+        "dishes": [
+          "DEFAULT-chi-kung-pao-tofu",
+          "DEFAULT-jap-agedashi-tofu",
+          "DEFAULT-med-shakshuka",
+          "DEFAULT-med-shakshuka"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-chi-kung-pao-tofu",
+          "DEFAULT-jap-agedashi-tofu",
+          "DEFAULT-med-shakshuka",
+          "DEFAULT-med-shakshuka"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-chi-kung-pao-tofu",
+          "DEFAULT-jap-agedashi-tofu",
+          "DEFAULT-med-shakshuka",
+          "DEFAULT-med-shakshuka"
+        ]
+      },
+      {
+        "dishes": [
+          "DEFAULT-chi-kung-pao-tofu",
+          "DEFAULT-jap-agedashi-tofu",
+          "DEFAULT-med-shakshuka",
+          "DEFAULT-med-shakshuka"
+        ]
       }
     ]
   }

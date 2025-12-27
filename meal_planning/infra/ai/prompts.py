@@ -3,12 +3,11 @@
 Contains prompts used for AI-powered meal planning features.
 """
 
-SYSTEM_PROMPT = """You are a helpful meal planning assistant. You help users plan their weekly and monthly meals.
+SYSTEM_PROMPT = """You are a helpful meal planning assistant. You help users plan their weekly meals.
 
 ## Your Capabilities
-- View and manage a catalogue of ingredients and dishes
-- Create and modify monthly meal plans (4 weeks per month)
-- Generate shopping lists separated by bulk vs weekly purchase items
+- View and manage a catalogue of dishes
+- Create meal plans for N weeks using the shortlist
 - Analyze meal variety and suggest improvements
 
 ## User Context
@@ -20,9 +19,8 @@ SYSTEM_PROMPT = """You are a helpful meal planning assistant. You help users pla
 ## Guidelines
 1. Always consider the user's dietary preferences and constraints
 2. Aim for variety - mix Eastern and Western dishes
-3. Don't schedule the same dish more than 2-3 times per month
-4. Consider ingredient reuse for efficiency (e.g., if buying spinach, use in multiple dishes)
-5. Balance weekday convenience with weekend cooking enjoyment
+3. Don't schedule the same dish more than 2-3 times per plan
+4. Consider ingredient reuse for efficiency
 
 When suggesting meals:
 - Explain your reasoning
@@ -30,40 +28,27 @@ When suggesting meals:
 - Balance variety with practicality
 """
 
-SUGGEST_PLAN_PROMPT = """Please create a meal plan for {month}.
+SUGGEST_PLAN_PROMPT = """Please suggest a {weeks}-week meal plan called '{plan_name}'.
 
 Consider:
 1. User preferences: {context}
 2. Available dishes: {dishes}
-3. Aim for variety across the 4 weeks
+3. Aim for variety across the weeks
 4. Balance Eastern and Western cuisines if applicable
-
-For each week (W1-W4), schedule dishes for:
-- Weekday dinners (Mon-Fri)
-- Weekend meals (Sat-Sun)
 
 Provide a summary of your plan and reasoning.
 """
 
-ANALYZE_VARIETY_PROMPT = """Analyze the variety in this meal plan for {month}:
+ANALYZE_VARIETY_PROMPT = """Analyze the variety in this meal plan:
 
 {plan_summary}
 
 Provide:
-1. Tag distribution (Eastern vs Western, etc.)
-2. Any dishes that repeat too often
-3. Suggestions for improvement
-4. Overall variety score assessment
-"""
-
-SHOPPING_LIST_PROMPT = """Generate a shopping list for Week {week} of {month}.
-
-Scheduled dishes:
-{week_schedule}
-
-Separate items into:
-1. Bulk items (buy monthly, stores well)
-2. Weekly items (buy fresh)
+1. Cuisine distribution
+2. Region balance (Eastern vs Western)
+3. Any dishes that repeat too often
+4. Suggestions for improvement
+5. Overall variety score assessment
 """
 
 
@@ -76,14 +61,15 @@ def format_system_prompt(user_context: str, available_dishes: str) -> str:
 
 
 def format_suggest_plan_prompt(
-    month: str, context: str, dishes: list[str]
+    plan_name: str, weeks: int, context: str, dishes: list[str]
 ) -> str:
     """Format meal suggestion prompt."""
     dishes_str = (
         "\n".join(f"- {d}" for d in dishes) if dishes else "No dishes available"
     )
     return SUGGEST_PLAN_PROMPT.format(
-        month=month,
+        plan_name=plan_name,
+        weeks=weeks,
         context=context or "No specific preferences",
         dishes=dishes_str,
     )
@@ -96,10 +82,17 @@ def format_dish_list(dishes: list[dict]) -> str:
 
     lines = []
     for dish in dishes:
-        tags = ", ".join(dish.get("tags", []))
+        cuisine = dish.get("cuisine", "")
+        region = dish.get("region", "")
+        categories = ", ".join(dish.get("categories", []))
         line = f"- {dish['name']}"
-        if tags:
-            line += f" ({tags})"
+        if cuisine:
+            line += f" ({cuisine}"
+            if region:
+                line += f", {region}"
+            line += ")"
+        if categories:
+            line += f" [{categories}]"
         lines.append(line)
 
     return "\n".join(lines)

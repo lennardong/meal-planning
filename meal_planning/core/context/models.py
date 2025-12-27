@@ -1,6 +1,6 @@
-"""User context domain model.
+"""User context domain entity.
 
-VOUserContext stores user preferences and constraints that guide AI decisions.
+UserContext stores user preferences and constraints that guide AI decisions.
 """
 
 from __future__ import annotations
@@ -15,8 +15,8 @@ def _context_uid() -> str:
     return f"CTX-{uuid4().hex[:8]}"
 
 
-class VOUserContext(BaseModel):
-    """Immutable user context value object.
+class UserContext(BaseModel):
+    """Immutable user context entity.
 
     Stores user preferences that influence AI meal planning decisions.
     Examples:
@@ -31,10 +31,10 @@ class VOUserContext(BaseModel):
     category: str | None = None  # e.g., "dietary", "location", "budget"
     context: str  # Natural language description
 
-    def with_context(self, context: str) -> VOUserContext:
+    def with_context(self, context: str) -> UserContext:
         """Return new context with updated description."""
         return self.model_copy(update={"context": context})
 
-    def with_category(self, category: str) -> VOUserContext:
+    def with_category(self, category: str) -> UserContext:
         """Return new context with updated category."""
         return self.model_copy(update={"category": category})

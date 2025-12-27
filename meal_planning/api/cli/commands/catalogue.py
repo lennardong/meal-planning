@@ -1,6 +1,6 @@
 """Catalogue CLI commands.
 
-Commands for managing ingredients and dishes.
+Commands for managing dishes and their categories.
 """
 
 from __future__ import annotations
@@ -11,12 +11,12 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from meal_planning.core.catalogue.models import VOIngredient, VODish
-from meal_planning.core.catalogue.enums import PurchaseType, IngredientTag, DishTag
+from meal_planning.core.catalogue.models import Dish
+from meal_planning.core.catalogue.enums import Category, Cuisine
 
 app = typer.Typer(
     name="catalogue",
-    help="Manage ingredients and dishes",
+    help="Manage dishes and categories",
     no_args_is_help=True,
 )
 console = Console()
@@ -29,139 +29,70 @@ def get_services():
     return get_app_context()
 
 
-@app.command("add-ingredient")
-def add_ingredient(
-    name: str = typer.Argument(..., help="Ingredient name"),
-    tag: Optional[str] = typer.Option(None, "--tag", "-t", help="Category tag"),
-    bulk: bool = typer.Option(False, "--bulk", "-b", help="Mark as bulk purchase"),
-):
-    """Add a new ingredient to the catalogue."""
-    ctx = get_services()
-
-    # Parse tag
-    tags = ()
-    if tag:
-        try:
-            tags = (IngredientTag(tag),)
-        except ValueError:
-            console.print(f"[red]Invalid tag: {tag}[/red]")
-            console.print(f"Valid tags: {[t.value for t in IngredientTag]}")
-            raise typer.Exit(1)
-
-    purchase_type = PurchaseType.BULK if bulk else PurchaseType.WEEKLY
-
-    ingredient = VOIngredient(
-        name=name,
-        tags=tags,
-        purchase_type=purchase_type,
-    )
-
-    result = ctx.catalogue.add_ingredient(ingredient)
-    if result.is_ok():
-        ctx.catalogue.save()
-        console.print(f"[green]Added ingredient: {name} ({ingredient.uid})[/green]")
-    else:
-        console.print(f"[red]Error: {result.error}[/red]")
-        raise typer.Exit(1)
-
-
 @app.command("add-dish")
 def add_dish(
     name: str = typer.Argument(..., help="Dish name"),
-    tag: Optional[str] = typer.Option(
-        None, "--tag", "-t", help="Style tag (Eastern/Western)"
+    categories: str = typer.Option(
+        ..., "--categories", "-c", help="Comma-separated categories (e.g. grains,greens,fermented)"
     ),
-    ingredients: Optional[str] = typer.Option(
-        None, "--ingredients", "-i", help="Comma-separated ingredient names"
+    cuisine: str = typer.Option(
+        ..., "--cuisine", help="Cuisine type (e.g. korean, thai, italian)"
+    ),
+    tag: Optional[str] = typer.Option(
+        None, "--tag", "-t", help="Optional custom tag"
+    ),
+    recipe: Optional[str] = typer.Option(
+        None, "--recipe", "-r", help="Recipe reference (URL or notes)"
     ),
 ):
     """Add a new dish to the catalogue."""
     ctx = get_services()
 
-    # Parse tag
-    tags = ()
-    if tag:
+    # Tags are open strings (auto-normalized)
+    tags = (tag,) if tag else ()
+
+    # Parse cuisine
+    try:
+        cuisine_enum = Cuisine(cuisine.strip().lower())
+    except ValueError:
+        console.print(f"[red]Invalid cuisine: {cuisine}[/red]")
+        console.print(f"Valid cuisines: {[c.value for c in Cuisine]}")
+        raise typer.Exit(1)
+
+    # Parse categories
+    category_list = []
+    for cat_str in categories.split(","):
+        cat_str = cat_str.strip().lower()
         try:
-            tags = (DishTag(tag),)
+            category_list.append(Category(cat_str))
         except ValueError:
-            console.print(f"[red]Invalid tag: {tag}[/red]")
-            console.print(f"Valid tags: {[t.value for t in DishTag]}")
+            console.print(f"[red]Invalid category: {cat_str}[/red]")
+            console.print(f"Valid categories: {[c.value for c in Category]}")
             raise typer.Exit(1)
 
-    # Find ingredient UIDs
-    ingredient_uids = []
-    if ingredients:
-        for ing_name in ingredients.split(","):
-            ing_name = ing_name.strip()
-            # Search by name in all ingredients
-            found = None
-            for ing in ctx.catalogue.list_ingredients():
-                if ing.name.lower() == ing_name.lower():
-                    found = ing
-                    break
-            if found:
-                ingredient_uids.append(found.uid)
-            else:
-                console.print(f"[yellow]Warning: Ingredient '{ing_name}' not found[/yellow]")
-
-    dish = VODish(
+    dish = Dish(
         name=name,
+        categories=tuple(category_list),
+        cuisine=cuisine_enum,
         tags=tags,
-        ingredient_uids=tuple(ingredient_uids),
+        recipe_reference=recipe or "",
     )
 
     result = ctx.catalogue.add_dish(dish)
     if result.is_ok():
         ctx.catalogue.save()
-        console.print(f"[green]Added dish: {name} ({dish.uid})[/green]")
+        console.print(f"[green]Added dish: {dish.name} ({dish.uid})[/green]")
+        console.print(f"  Cuisine: {dish.cuisine.value} ({dish.region.value})")
+        console.print(f"  Categories: {', '.join(c.value for c in dish.categories)}")
     else:
         console.print(f"[red]Error: {result.error}[/red]")
         raise typer.Exit(1)
 
 
 @app.command("list")
-def list_items(
-    item_type: str = typer.Argument(
-        "all", help="What to list: 'ingredients', 'dishes', or 'all'"
-    ),
-):
-    """List catalogue items."""
+def list_dishes():
+    """List all dishes in the catalogue."""
     ctx = get_services()
-
-    if item_type in ("ingredients", "all"):
-        _list_ingredients(ctx)
-
-    if item_type in ("dishes", "all"):
-        _list_dishes(ctx)
-
-
-def _list_ingredients(ctx):
-    """Display ingredients table."""
-    ingredients = ctx.catalogue.list_ingredients()
-
-    if not ingredients:
-        console.print("[yellow]No ingredients in catalogue[/yellow]")
-        return
-
-    table = Table(title="Ingredients")
-    table.add_column("UID", style="dim")
-    table.add_column("Name")
-    table.add_column("Tags")
-    table.add_column("Purchase")
-
-    for ing in ingredients:
-        table.add_row(
-            ing.uid,
-            ing.name,
-            ", ".join(t.value for t in ing.tags),
-            ing.purchase_type.value,
-        )
-
-    console.print(table)
-
-
-def _list_dishes(ctx):
-    """Display dishes table."""
     dishes = ctx.catalogue.list_dishes()
 
     if not dishes:
@@ -171,21 +102,67 @@ def _list_dishes(ctx):
     table = Table(title="Dishes")
     table.add_column("UID", style="dim")
     table.add_column("Name")
-    table.add_column("Tags")
-    table.add_column("Ingredients")
+    table.add_column("Cuisine")
+    table.add_column("Region")
+    table.add_column("Categories")
+    table.add_column("Recipe")
 
     for dish in dishes:
-        ing_names = []
-        for uid in dish.ingredient_uids:
-            result = ctx.catalogue.get_ingredient(uid)
-            if result.is_ok():
-                ing_names.append(result.unwrap().name)
-
         table.add_row(
             dish.uid,
             dish.name,
-            ", ".join(t.value for t in dish.tags),
-            ", ".join(ing_names) if ing_names else "(none)",
+            dish.cuisine.value,
+            dish.region.value,
+            ", ".join(c.value for c in dish.categories) if dish.categories else "(none)",
+            dish.recipe_reference[:30] + "..." if len(dish.recipe_reference) > 30 else dish.recipe_reference,
         )
 
     console.print(table)
+
+
+@app.command("categories")
+def list_categories():
+    """List all available food categories."""
+    from meal_planning.core.catalogue.enums import CATEGORY_PURCHASE_TYPE, PurchaseType
+
+    table = Table(title="Food Categories")
+    table.add_column("Category")
+    table.add_column("Purchase Type")
+
+    for cat in Category:
+        purchase = CATEGORY_PURCHASE_TYPE.get(cat, PurchaseType.WEEKLY)
+        table.add_row(cat.value, purchase.value)
+
+    console.print(table)
+
+
+@app.command("cuisines")
+def list_cuisines():
+    """List all available cuisine types."""
+    from meal_planning.core.catalogue.enums import CUISINE_REGION, Region
+
+    table = Table(title="Cuisine Types")
+    table.add_column("Cuisine")
+    table.add_column("Region")
+
+    for cuisine in Cuisine:
+        region = CUISINE_REGION.get(cuisine, Region.EASTERN)
+        table.add_row(cuisine.value, region.value)
+
+    console.print(table)
+
+
+@app.command("delete")
+def delete_dish(
+    uid: str = typer.Argument(..., help="Dish UID to delete"),
+):
+    """Delete a dish from the catalogue."""
+    ctx = get_services()
+
+    result = ctx.catalogue.delete_dish(uid)
+    if result.is_ok():
+        ctx.catalogue.save()
+        console.print(f"[green]Deleted dish: {uid}[/green]")
+    else:
+        console.print(f"[red]Error: {result.error}[/red]")
+        raise typer.Exit(1)

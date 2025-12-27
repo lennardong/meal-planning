@@ -13,6 +13,12 @@ dependencies = [
     "pydantic>=2.12.5",
     "typer>=0.9.0",
     "rich>=13.0.0",
+    "streamlit>=1.40.0",
+    "plotly>=5.0.0",
+    "dash>=2.18.0",
+    "dash-mantine-components>=0.14.0",
+    "dash-ag-grid>=31.0.0",
+    "dash-iconify>=0.1.2",
 ]
 
 [project.scripts]

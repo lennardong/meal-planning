@@ -24,8 +24,8 @@ class AnalysisService:
 
     def __init__(
         self,
-        catalogue: CatalogueService,
-        planning: PlanningService,
+        catalogue: "CatalogueService",
+        planning: "PlanningService",
     ):
         """Initialize the analysis service.
 
@@ -36,16 +36,20 @@ class AnalysisService:
         self._catalogue = catalogue
         self._planning = planning
 
-    def get_variety_report(self, month: str) -> VarietyReport | None:
-        """Analyze variety in a monthly plan.
+    def get_variety_report(self, plan_name: str) -> VarietyReport | None:
+        """Analyze variety in a meal plan.
 
         Args:
-            month: Month in format "YYYY-MM".
+            plan_name: Plan name or UID.
 
         Returns:
             VarietyReport if plan exists, None otherwise.
         """
-        plan_result = self._planning.get_plan_for_month(month)
+        # Try by UID first, then by name
+        plan_result = self._planning.get_plan(plan_name)
+        if plan_result.is_err():
+            plan_result = self._planning.get_plan_by_name(plan_name)
+
         if plan_result.is_err():
             return None
 
@@ -54,16 +58,16 @@ class AnalysisService:
 
         return assess_variety(plan, dishes)
 
-    def get_suggestions(self, month: str) -> list[str] | None:
+    def get_suggestions(self, plan_name: str) -> list[str] | None:
         """Get improvement suggestions for a plan.
 
         Args:
-            month: Month in format "YYYY-MM".
+            plan_name: Plan name or UID.
 
         Returns:
             List of suggestions if plan exists, None otherwise.
         """
-        report = self.get_variety_report(month)
+        report = self.get_variety_report(plan_name)
         if report is None:
             return None
 

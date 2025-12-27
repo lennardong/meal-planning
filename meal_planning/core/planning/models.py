@@ -1,7 +1,9 @@
 """Planning domain models.
 
-Immutable Pydantic models for meal planning.
-MonthlyPlan is the aggregate root containing WeekPlan value objects.
+Simplified models for meal planning:
+- WeekPlan: Just a list of dish UIDs (no day assignment)
+- MealPlan: N weeks of dishes
+- Shortlist: User's selection of dishes to plan with
 """
 
 from __future__ import annotations
@@ -10,8 +12,6 @@ from uuid import uuid4
 
 from pydantic import BaseModel, Field, ConfigDict
 
-from meal_planning.core.planning.enums import Day
-
 
 def _plan_uid() -> str:
     """Generate unique plan identifier."""
@@ -19,132 +19,133 @@ def _plan_uid() -> str:
 
 
 class WeekPlan(BaseModel):
-    """Value Object: schedule for one week.
+    """A week's worth of dishes - no day assignment.
 
-    Contains dish assignments for weekday dinners and weekend meals.
-    Dishes are referenced by UID (or None if unscheduled).
+    Simply a list of dish UIDs scheduled for this week.
     """
 
     model_config = ConfigDict(frozen=True)
 
-    weekday_dinners: dict[Day, str | None] = Field(
-        default_factory=lambda: {
-            Day.MON: None,
-            Day.TUE: None,
-            Day.WED: None,
-            Day.THU: None,
-            Day.FRI: None,
-        }
-    )
-    weekend_meals: dict[Day, str | None] = Field(
-        default_factory=lambda: {
-            Day.SAT: None,
-            Day.SUN: None,
-        }
-    )
+    dishes: tuple[str, ...] = Field(default_factory=tuple)
 
-    def with_dish(self, day: Day, dish_uid: str | None) -> WeekPlan:
-        """Return new WeekPlan with dish scheduled for given day.
+    def with_dish(self, dish_uid: str) -> WeekPlan:
+        """Return new WeekPlan with dish added."""
+        if dish_uid in self.dishes:
+            return self
+        return self.model_copy(update={"dishes": (*self.dishes, dish_uid)})
 
-        Args:
-            day: Day to schedule.
-            dish_uid: Dish UID or None to clear.
-
-        Returns:
-            New WeekPlan with updated schedule.
-        """
-        if day in Day.weekend():
-            return self.model_copy(
-                update={"weekend_meals": {**self.weekend_meals, day: dish_uid}}
-            )
+    def without_dish(self, dish_uid: str) -> WeekPlan:
+        """Return new WeekPlan with dish removed."""
         return self.model_copy(
-            update={"weekday_dinners": {**self.weekday_dinners, day: dish_uid}}
+            update={"dishes": tuple(uid for uid in self.dishes if uid != dish_uid)}
         )
 
-    def get_dish(self, day: Day) -> str | None:
-        """Get dish UID for a specific day."""
-        if day in Day.weekend():
-            return self.weekend_meals.get(day)
-        return self.weekday_dinners.get(day)
-
-    def all_dish_uids(self) -> tuple[str | None, ...]:
-        """Get all dish UIDs scheduled this week (including None)."""
-        return tuple(self.weekday_dinners.values()) + tuple(
-            self.weekend_meals.values()
-        )
-
-    def scheduled_dish_uids(self) -> tuple[str, ...]:
-        """Get only scheduled dish UIDs (excluding None)."""
-        return tuple(uid for uid in self.all_dish_uids() if uid is not None)
+    @property
+    def dish_count(self) -> int:
+        """Number of dishes in this week."""
+        return len(self.dishes)
 
 
-class MonthlyPlan(BaseModel):
-    """Aggregate Root: monthly meal plan with 4 weeks.
+class MealPlan(BaseModel):
+    """A meal plan for N weeks.
 
-    Represents a complete month of meal planning.
-    Contains exactly 4 WeekPlan value objects (W1-W4).
+    Represents a complete meal plan with variable number of weeks.
+    Each week contains a list of dish UIDs.
     """
 
     model_config = ConfigDict(frozen=True)
 
     uid: str = Field(default_factory=_plan_uid)
-    month: str  # Format: "2025-01"
-    weeks: tuple[WeekPlan, WeekPlan, WeekPlan, WeekPlan] = Field(
-        default_factory=lambda: (WeekPlan(), WeekPlan(), WeekPlan(), WeekPlan())
-    )
+    name: str  # e.g., "January 2025", "Q1 Plan"
+    weeks: tuple[WeekPlan, ...] = Field(default_factory=tuple)
 
-    def with_week(self, week_num: int, week: WeekPlan) -> MonthlyPlan:
-        """Return new MonthlyPlan with updated week.
+    @classmethod
+    def create(cls, name: str, num_weeks: int) -> MealPlan:
+        """Create a new plan with N empty weeks.
 
         Args:
-            week_num: Week number (1-4).
+            name: Plan name (e.g., "January 2025").
+            num_weeks: Number of weeks in the plan.
+
+        Returns:
+            New MealPlan with empty weeks.
+        """
+        return cls(
+            name=name,
+            weeks=tuple(WeekPlan() for _ in range(num_weeks)),
+        )
+
+    @property
+    def num_weeks(self) -> int:
+        """Number of weeks in this plan."""
+        return len(self.weeks)
+
+    @property
+    def total_dishes(self) -> int:
+        """Total number of dish slots across all weeks."""
+        return sum(week.dish_count for week in self.weeks)
+
+    def all_dish_uids(self) -> tuple[str, ...]:
+        """Get all dish UIDs across all weeks."""
+        result: list[str] = []
+        for week in self.weeks:
+            result.extend(week.dishes)
+        return tuple(result)
+
+    def with_week(self, week_num: int, week: WeekPlan) -> MealPlan:
+        """Return new MealPlan with updated week.
+
+        Args:
+            week_num: Week number (1-indexed).
             week: New WeekPlan.
 
         Returns:
-            New MonthlyPlan with updated week.
+            New MealPlan with updated week.
 
         Raises:
-            ValueError: If week_num not in 1-4.
+            ValueError: If week_num out of range.
         """
-        if not 1 <= week_num <= 4:
-            raise ValueError(f"Week number must be 1-4, got {week_num}")
+        if not 1 <= week_num <= len(self.weeks):
+            raise ValueError(f"Week number must be 1-{len(self.weeks)}, got {week_num}")
 
         weeks_list = list(self.weeks)
         weeks_list[week_num - 1] = week
         return self.model_copy(update={"weeks": tuple(weeks_list)})
 
-    def schedule_dish(
-        self, week_num: int, day: Day, dish_uid: str | None
-    ) -> MonthlyPlan:
-        """Convenience method to schedule a dish in one call.
 
-        Args:
-            week_num: Week number (1-4).
-            day: Day of week.
-            dish_uid: Dish UID or None to clear.
+class Shortlist(BaseModel):
+    """User's selection of dishes to plan with.
 
-        Returns:
-            New MonthlyPlan with dish scheduled.
-        """
-        week = self.weeks[week_num - 1]
-        updated_week = week.with_dish(day, dish_uid)
-        return self.with_week(week_num, updated_week)
+    A persistent list of dish UIDs that the user wants to
+    include when generating a meal plan.
+    """
 
-    def all_scheduled_dish_uids(self) -> tuple[str, ...]:
-        """Get all scheduled dish UIDs across all weeks."""
-        result: list[str] = []
-        for week in self.weeks:
-            result.extend(week.scheduled_dish_uids())
-        return tuple(result)
+    model_config = ConfigDict(frozen=True)
 
-    @classmethod
-    def for_month(cls, month: str) -> MonthlyPlan:
-        """Create a new plan for a specific month.
+    dish_uids: tuple[str, ...] = Field(default_factory=tuple)
 
-        Args:
-            month: Month in format "YYYY-MM" (e.g., "2025-01").
+    def add(self, dish_uid: str) -> Shortlist:
+        """Return new Shortlist with dish added."""
+        if dish_uid in self.dish_uids:
+            return self
+        return self.model_copy(update={"dish_uids": (*self.dish_uids, dish_uid)})
 
-        Returns:
-            New MonthlyPlan with uid based on month.
-        """
-        return cls(uid=f"PLAN-{month}", month=month)
+    def remove(self, dish_uid: str) -> Shortlist:
+        """Return new Shortlist with dish removed."""
+        return self.model_copy(
+            update={
+                "dish_uids": tuple(uid for uid in self.dish_uids if uid != dish_uid)
+            }
+        )
+
+    def clear(self) -> Shortlist:
+        """Return new empty Shortlist."""
+        return self.model_copy(update={"dish_uids": ()})
+
+    def __len__(self) -> int:
+        """Number of dishes in shortlist."""
+        return len(self.dish_uids)
+
+    def __contains__(self, dish_uid: str) -> bool:
+        """Check if dish is in shortlist."""
+        return dish_uid in self.dish_uids

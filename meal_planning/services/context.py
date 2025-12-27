@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 from typing import TYPE_CHECKING
 
-from meal_planning.core.context.models import VOUserContext
+from meal_planning.core.context.models import UserContext
 from meal_planning.core.shared.types import Result, Ok, Err, NotFoundError, DuplicateError
 
 if TYPE_CHECKING:
@@ -30,7 +30,7 @@ class ContextService:
         """
         self._store = store
         self._user_id = user_id
-        self._contexts: dict[str, VOUserContext] = {}
+        self._contexts: dict[str, UserContext] = {}
         self._loaded = False
 
     def _key(self, filename: str) -> str:
@@ -46,7 +46,7 @@ class ContextService:
         if ctx_bytes:
             ctx_data = json.loads(ctx_bytes.decode("utf-8"))
             self._contexts = {
-                uid: VOUserContext.model_validate(data)
+                uid: UserContext.model_validate(data)
                 for uid, data in ctx_data.items()
             }
 
@@ -61,8 +61,8 @@ class ContextService:
         )
 
     def add_context(
-        self, context: VOUserContext
-    ) -> Result[VOUserContext, DuplicateError]:
+        self, context: UserContext
+    ) -> Result[UserContext, DuplicateError]:
         """Add a new context.
 
         Args:
@@ -77,7 +77,7 @@ class ContextService:
         self._contexts[context.uid] = context
         return Ok(context)
 
-    def get_context(self, uid: str) -> Result[VOUserContext, NotFoundError]:
+    def get_context(self, uid: str) -> Result[UserContext, NotFoundError]:
         """Get a context by UID.
 
         Args:
@@ -92,12 +92,12 @@ class ContextService:
             return Err(NotFoundError("Context", uid))
         return Ok(ctx)
 
-    def list_contexts(self) -> list[VOUserContext]:
+    def list_contexts(self) -> list[UserContext]:
         """Get all contexts."""
         self._ensure_loaded()
         return list(self._contexts.values())
 
-    def list_contexts_by_category(self, category: str) -> list[VOUserContext]:
+    def list_contexts_by_category(self, category: str) -> list[UserContext]:
         """Get contexts by category.
 
         Args:
@@ -110,8 +110,8 @@ class ContextService:
         return [ctx for ctx in self._contexts.values() if ctx.category == category]
 
     def update_context(
-        self, context: VOUserContext
-    ) -> Result[VOUserContext, NotFoundError]:
+        self, context: UserContext
+    ) -> Result[UserContext, NotFoundError]:
         """Update an existing context.
 
         Args:

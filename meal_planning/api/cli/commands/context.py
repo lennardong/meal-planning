@@ -11,7 +11,7 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
-from meal_planning.core.context.models import VOUserContext
+from meal_planning.core.context.models import UserContext
 
 app = typer.Typer(
     name="context",
@@ -38,7 +38,7 @@ def add_context(
     """Add a user context (preference/constraint)."""
     ctx = get_services()
 
-    context = VOUserContext(
+    context = UserContext(
         context=text,
         category=category,
     )

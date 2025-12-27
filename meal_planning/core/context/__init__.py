@@ -1,7 +1,11 @@
 """Context bounded context - user preferences and constraints."""
 
-from meal_planning.core.context.models import VOUserContext
+from meal_planning.core.context.models import UserContext
+from meal_planning.core.context.aggregate import Preferences
 
 __all__ = [
-    "VOUserContext",
+    # Entity
+    "UserContext",
+    # Aggregate
+    "Preferences",
 ]
