@@ -19,7 +19,11 @@ dependencies = [
     "dash-mantine-components>=0.14.0",
     "dash-ag-grid>=31.0.0",
     "dash-iconify>=0.1.2",
+    "gunicorn>=21.0.0",
 ]
 
 [project.scripts]
 meal = "meal_planning.api.cli.main:main"
+
+[project.optional-dependencies]
+prod = ["gunicorn>=21.0.0"]

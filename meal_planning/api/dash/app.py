@@ -87,5 +87,8 @@ app.layout = dmc.MantineProvider(
 )
 
 
+# WSGI entry point for gunicorn
+server = app.server
+
 if __name__ == "__main__":
     app.run(debug=True)

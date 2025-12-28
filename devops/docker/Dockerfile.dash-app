@@ -1,0 +1,22 @@
+FROM python:3.13-slim
+WORKDIR /app
+
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
+
+# Install deps only (cache layer)
+COPY pyproject.toml uv.lock README.md ./
+RUN uv sync --frozen --no-dev --no-install-project
+
+# Copy source and install project
+COPY meal_planning ./meal_planning
+RUN uv sync --frozen --no-dev
+
+COPY devops/docker/entrypoint.dash-app.sh ./entrypoint.sh
+RUN chmod +x ./entrypoint.sh
+
+ENV PORT=8060
+ENV WORKERS=2
+EXPOSE 8060
+
+ENTRYPOINT ["./entrypoint.sh"]
