@@ -1,3 +1,3 @@
-# Rewilding the Gut
+# Palate
 
-*A Monthly Meal Planner*
+*Expand your Palette*

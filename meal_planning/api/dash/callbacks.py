@@ -413,3 +413,18 @@ def delete_dish(n_clicks, uid, shortlist):
     new_shortlist = [u for u in shortlist if u != uid]
 
     return False, new_shortlist  # Close modal and update shortlist
+
+
+# ============================================================================
+# Info Modal Callback
+# ============================================================================
+
+@callback(
+    Output("info-modal", "opened"),
+    Input("info-btn", "n_clicks"),
+    State("info-modal", "opened"),
+    prevent_initial_call=True,
+)
+def toggle_info_modal(n_clicks, is_open):
+    """Toggle info modal on button click."""
+    return not is_open

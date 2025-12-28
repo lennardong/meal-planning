@@ -14,6 +14,7 @@ dependencies = [
     "typer>=0.9.0",
     "rich>=13.0.0",
     "plotly[express]>=5.0.0",
+    "pandas>=2.0.0",
     "dash>=2.18.0",
     "dash-mantine-components>=0.14.0",
     "dash-ag-grid>=31.0.0",

@@ -6,8 +6,93 @@ import dash_mantine_components as dmc
 from dash import dcc
 from dash_iconify import DashIconify
 
+from dash import html
+
 from meal_planning.core.catalogue.models import Dish
 from meal_planning.core.catalogue.enums import Cuisine, Category
+
+
+# =============================================================================
+# Tag Color System
+# =============================================================================
+
+CUISINE_COLORS = {
+    "chinese": {"bg": "#FFEBEE", "text": "#C62828"},
+    "japanese": {"bg": "#FFF3E0", "text": "#E65100"},
+    "korean": {"bg": "#FCE4EC", "text": "#AD1457"},
+    "thai": {"bg": "#F3E5F5", "text": "#6A1B9A"},
+    "indian": {"bg": "#FFFDE7", "text": "#F57F17"},
+    "italian": {"bg": "#E8F5E9", "text": "#2E7D32"},
+    "mexican": {"bg": "#E0F2F1", "text": "#00695C"},
+    "western": {"bg": "#E8EAF6", "text": "#3949AB"},
+    "mediterranean": {"bg": "#E1F5FE", "text": "#0277BD"},
+    "vietnamese": {"bg": "#FFF8E1", "text": "#FF8F00"},
+    "malay": {"bg": "#FBE9E7", "text": "#D84315"},
+}
+
+CATEGORY_COLORS = {
+    "greens": {"bg": "#E8F5E9", "text": "#4A7C59"},
+    "legumes": {"bg": "#EFEBE9", "text": "#8B5A2B"},
+    "grains": {"bg": "#FFFDE7", "text": "#A68F00"},
+    "fermented": {"bg": "#E0F7FA", "text": "#5BA4A4"},
+    "alliums": {"bg": "#F3E5F5", "text": "#7B4B94"},
+    "protein": {"bg": "#E3F2FD", "text": "#4A6FA5"},
+    "fruits": {"bg": "#FCE4EC", "text": "#D46A84"},
+    "nuts_seeds": {"bg": "#FFF3E0", "text": "#D4883E"},
+    "dairy": {"bg": "#F5F5F5", "text": "#757575"},
+    "red_orange_veg": {"bg": "#FFEBEE", "text": "#C1513D"},
+    "cruciferous": {"bg": "#E8F5E9", "text": "#558B2F"},
+    "root_veg": {"bg": "#EFEBE9", "text": "#6D4C41"},
+    "mushrooms": {"bg": "#F3E5F5", "text": "#5D4037"},
+    "herbs_spices": {"bg": "#E8F5E9", "text": "#33691E"},
+    "eggs": {"bg": "#FFFDE7", "text": "#F9A825"},
+    "seafood": {"bg": "#E1F5FE", "text": "#0288D1"},
+    "slow_cooked": {"bg": "#FBE9E7", "text": "#BF360C"},
+    "raw": {"bg": "#E8F5E9", "text": "#2E7D32"},
+    "quick_cook": {"bg": "#FFF8E1", "text": "#FF8F00"},
+}
+
+DEFAULT_COLOR = {"bg": "#F5F5F5", "text": "#757575"}
+
+
+def cuisine_tag(cuisine_value: str) -> html.Span:
+    """Create a styled cuisine tag."""
+    colors = CUISINE_COLORS.get(cuisine_value.lower(), DEFAULT_COLOR)
+    return html.Span(
+        cuisine_value.title(),
+        style={
+            "backgroundColor": colors["bg"],
+            "color": colors["text"],
+            "padding": "4px 10px",
+            "borderRadius": "4px",
+            "fontSize": "11px",
+            "fontWeight": "500",
+            "textTransform": "uppercase",
+            "letterSpacing": "0.5px",
+            "display": "inline-block",
+        },
+    )
+
+
+def category_tag(category_value: str) -> html.Span:
+    """Create a styled category tag."""
+    # Normalize key (handle underscores and spaces)
+    key = category_value.lower().replace(" ", "_")
+    colors = CATEGORY_COLORS.get(key, DEFAULT_COLOR)
+    return html.Span(
+        category_value.replace("_", " ").title(),
+        style={
+            "backgroundColor": colors["bg"],
+            "color": colors["text"],
+            "padding": "3px 8px",
+            "borderRadius": "4px",
+            "fontSize": "10px",
+            "fontWeight": "500",
+            "textTransform": "uppercase",
+            "letterSpacing": "0.3px",
+            "display": "inline-block",
+        },
+    )
 
 
 # Cache dish data at module level (loaded once on import)
@@ -37,22 +122,16 @@ def dish_card(dish: Dish, direction: str = "right") -> dmc.Paper:
     if direction == "right":
         icon = "mdi:chevron-right"
         action_type = "add-dish"
-        color = "blue"
+        action_color = "saffron"
     else:
         icon = "mdi:chevron-left"
         action_type = "remove-dish"
-        color = "red"
+        action_color = "gray"
 
-    # Region-based cuisine color
-    region_color = "blue" if dish.region.value == "eastern" else "orange"
-
-    # Category badges (show first 2 for compact view)
-    category_badges = dmc.Group(
-        [
-            dmc.Badge(cat.value, size="xs", variant="light", color="gray")
-            for cat in dish.categories[:2]
-        ],
-        gap=4,
+    # Category tags (show first 2 for compact view)
+    category_tags = html.Div(
+        [category_tag(cat.value) for cat in dish.categories[:2]],
+        style={"display": "flex", "gap": "4px", "flexWrap": "wrap"},
     )
 
     return dmc.Paper(
@@ -74,21 +153,17 @@ def dish_card(dish: Dish, direction: str = "right") -> dmc.Paper:
                             DashIconify(icon=icon, width=16),
                             id={"type": action_type, "uid": dish.uid},
                             variant="light",
-                            color=color,
+                            color=action_color,
                             size="sm",
                         ),
                     ],
                     justify="space-between",
                     wrap="nowrap",
                 ),
-                # Row 2: Cuisine badge
-                dmc.Badge(
-                    dish.cuisine.value.title(),
-                    size="xs",
-                    color=region_color,
-                ),
-                # Row 3: Category badges
-                category_badges,
+                # Row 2: Cuisine tag
+                cuisine_tag(dish.cuisine.value),
+                # Row 3: Category tags
+                category_tags,
             ],
             gap=4,
         ),
@@ -151,23 +226,29 @@ def dish_column(title: str, column_id: str, direction: str) -> dmc.Card:
         scrollbarSize=8,  # Thinner scrollbar
     )
 
-    # Footer with count
-    footer = dmc.Text(
-        id=f"{column_id}-count",
-        children="0 dishes",
-        size="sm",
-        c="dimmed",
-        ta="center",
+    # Footer with count (chiclet style)
+    footer = dmc.Center(
+        html.Span(
+            "0 dishes",
+            id=f"{column_id}-count",
+            className="counter-chiclet",
+        ),
         mt="sm",
     )
 
+    # Section chiclet label
+    section_label = html.Span(
+        title.upper(),
+        className="section-chiclet",
+    )
+
     # Header with optional add button (only for catalogue)
-    header_content = [dmc.Title(title, order=4)]
+    header_content = [section_label]
     if column_id == "catalogue":
         header_content = [
             dmc.Group(
                 [
-                    dmc.Title(title, order=4),
+                    section_label,
                     add_dish_button(),
                 ],
                 justify="space-between",
@@ -197,7 +278,7 @@ def results_modal() -> dmc.Modal:
     """Results modal - simple single-page scrollable layout."""
     return dmc.Modal(
         id="results-modal",
-        title="Your Meal Plan Report",
+        title="Your Palate Score",
         centered=True,
         size="85%",
         padding="lg",

@@ -1,0 +1,91 @@
+/* Palate Design System - Basecamp-Inspired Warmth */
+
+:root {
+  /* Brand Colors */
+  --color-saffron: #F4A940;
+  --color-saffron-hover: #E09830;
+  --color-aubergine: #5B3E6B;
+
+  /* Warmer Neutrals (Basecamp-inspired) */
+  --color-canvas: #F5F3EF;
+  --color-section-bg: #FAFAF8;
+  --color-card-bg: #FFFFFF;
+  --color-border: #E8E4DF;
+  --color-charcoal: #1D1C1A;
+  --color-charcoal-light: #5C5955;
+  --color-muted: #8C8780;
+  --color-chiclet-bg: #E8E4DF;
+  --color-chiclet-text: #6B6560;
+
+  /* Typography */
+  --font-display: 'DM Sans', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+body {
+  background-color: var(--color-canvas) !important;
+  font-family: var(--font-body);
+  color: var(--color-charcoal);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--color-aubergine);
+}
+
+/* Markdown content styling */
+.dash-markdown h1 {
+  font-family: var(--font-display);
+  color: var(--color-aubergine);
+  font-weight: 700;
+}
+
+.dash-markdown h2,
+.dash-markdown h3 {
+  font-family: var(--font-display);
+  color: var(--color-charcoal);
+  font-weight: 600;
+}
+
+.dash-markdown blockquote {
+  border-left: 3px solid var(--color-saffron);
+  padding-left: 16px;
+  color: var(--color-charcoal-light);
+  font-style: italic;
+}
+
+/* Seamless header - no border, matches canvas */
+.mantine-AppShell-header {
+  background-color: var(--color-canvas) !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+/* Card hover - saffron border highlight */
+.mantine-Paper-root:hover {
+  border-color: var(--color-saffron) !important;
+  transition: border-color 0.15s ease;
+}
+
+/* Section chiclet label */
+.section-chiclet {
+  display: inline-block;
+  background: var(--color-chiclet-bg);
+  color: var(--color-chiclet-text);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+/* Counter chiclet */
+.counter-chiclet {
+  display: inline-block;
+  background: var(--color-canvas);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: var(--color-chiclet-text);
+}
