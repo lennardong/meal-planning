@@ -7,6 +7,7 @@ import dash_mantine_components as dmc
 from dash_iconify import DashIconify
 
 from meal_planning.app import get_app_context
+from meal_planning.copy import get_copy
 from meal_planning.api.dash.components import (
     dish_column,
     results_modal,
@@ -25,12 +26,12 @@ app = Dash(__name__, external_stylesheets=[dmc.styles.CHARTS])
 # Build layout - no navbar, two-column main
 layout = dmc.AppShell(
     [
-        # Header with centered title only
+        # Header with centered title
         dmc.AppShellHeader(
             dmc.Center(
-                dmc.Title(
-                    "Rewilding the Gut: A Monthly Meal Planner",
-                    order=3,
+                dcc.Markdown(
+                    get_copy("app_header"),
+                    style={"textAlign": "center", "margin": 0},
                 ),
                 h="100%",
             )
@@ -46,6 +47,15 @@ layout = dmc.AppShell(
                     # Modals
                     dish_modal(),
                     results_modal(),
+                    # About section (constrained width for readability)
+                    dmc.Container(
+                        dcc.Markdown(
+                            get_copy("app_about"),
+                            style={"fontSize": "14px", "lineHeight": "1.5"},
+                        ),
+                        size="sm",
+                        py="xs",
+                    ),
                     # Row 1: Catalogue and Shortlist columns
                     dmc.SimpleGrid(
                         [
@@ -68,12 +78,12 @@ layout = dmc.AppShell(
                         py="md",
                     ),
                 ],
-                gap="lg",
+                gap="md",
                 p="md",
             )
         ),
     ],
-    header={"height": 60},
+    header={"height": 100},
     padding="md",
     id="appshell",
 )

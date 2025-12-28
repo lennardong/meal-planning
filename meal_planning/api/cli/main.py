@@ -121,25 +121,6 @@ def status():
 
 
 @app.command()
-def web(
-    port: int = typer.Option(8501, "--port", "-p", help="Port to run on"),
-):
-    """Launch the Streamlit web interface."""
-    import subprocess
-    import sys
-    from pathlib import Path
-
-    app_path = Path(__file__).parent.parent / "web" / "app.py"
-    console.print(f"[green]Starting web app at http://localhost:{port}[/green]")
-    subprocess.run([
-        sys.executable, "-m", "streamlit", "run",
-        str(app_path),
-        "--server.port", str(port),
-        "--server.headless", "true",
-    ])
-
-
-@app.command()
 def dash(
     port: int = typer.Option(8050, "--port", "-p", help="Port to run on"),
     debug: bool = typer.Option(False, "--debug", help="Enable debug mode"),
