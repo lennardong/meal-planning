@@ -46,6 +46,21 @@ The result? A system where:
 
 ## Quick Start
 
+### Web UI (Palate)
+
+```bash
+# Development (hot reload on port 8051)
+./devops/scripts/dev.sh
+
+# Production (Docker on port 8050)
+docker build -f devops/docker/Dockerfile.dash-app -t palate-dash-app .
+docker run -d -p 8050:8060 --name palate-app palate-dash-app
+```
+
+Open http://localhost:8051 (dev) or http://localhost:8050 (Docker).
+
+### CLI
+
 ```bash
 # Install dependencies
 uv sync
@@ -96,8 +111,11 @@ Let me walk you through the technology choices. Each library was selected delibe
 | Package | Version | Layer | Purpose |
 |---------|---------|-------|---------|
 | **Pydantic** | >=2.12.5 | Core | Data validation, serialization, immutable models |
-| **Typer** | >=0.9.0 | API | Command-line interface framework |
-| **Rich** | >=13.0.0 | API | Terminal formatting, tables, colors |
+| **Typer** | >=0.9.0 | API/CLI | Command-line interface framework |
+| **Rich** | >=13.0.0 | API/CLI | Terminal formatting, tables, colors |
+| **Dash** | >=2.18 | API/Web | Reactive web framework |
+| **Dash Mantine** | >=0.14 | API/Web | Mantine UI components for Dash |
+| **Plotly** | >=5.24 | API/Web | Interactive charts |
 
 ---
 
@@ -319,19 +337,31 @@ class LocalFilesystemBlobStore:
 
 ### 4. API Layer (`api/`)
 
-**Purpose**: External interfaces. Currently just CLI, but could add REST, GraphQL.
+**Purpose**: External interfaces. CLI for power users, Web UI for visual meal planning.
 
 ```
 api/
-└── cli/
-    ├── main.py            # Typer app with nested subcommands
-    └── commands/
-        ├── catalogue.py   # meal catalogue add-ingredient/list
-        ├── planning.py    # meal plan show/schedule
-        ├── shopping.py    # meal shop list
-        ├── analysis.py    # meal analysis variety
-        └── context.py     # meal context add/list
+├── cli/                       # Command-line interface
+│   ├── main.py                # Typer app with nested subcommands
+│   └── commands/
+│       ├── catalogue.py       # meal catalogue add-ingredient/list
+│       ├── planning.py        # meal plan show/schedule
+│       ├── shopping.py        # meal shop list
+│       ├── analysis.py        # meal analysis variety
+│       └── context.py         # meal context add/list
+│
+└── dash/                      # Web UI (Palate)
+    ├── app.py                 # Dash app, layout, MantineProvider
+    ├── callbacks.py           # Reactive callbacks
+    ├── components.py          # Component factories
+    └── assets/style.css       # Design system (CSS variables)
 ```
+
+**Web UI Architecture** (see `api/dash/README.md` for details):
+- **Kanban-style** two-column layout (Catalogue ↔ Shortlist)
+- **Mantine components** with custom theme (saffron palette)
+- **CSS variables** injected from `theme.py` for consistent colors
+- **Plotly charts** for diversity analysis
 
 **Nested Commands**:
 
@@ -345,7 +375,34 @@ meal analysis variety 2025-01
 meal context add "Vegetarian" --category dietary
 ```
 
-### 5. Bootstrap (`app.py`)
+### 5. Presentation Layer (`theme.py`)
+
+**Purpose**: Single source of truth for all presentation tokens. Keeps core domain pure.
+
+```python
+# theme.py
+CUISINE_FLAG: dict[Cuisine, str] = {
+    Cuisine.KOREAN: "🇰🇷",
+    Cuisine.JAPANESE: "🇯🇵",
+    ...
+}
+
+CATEGORY_COLOR: dict[Category, CategoryColor] = {
+    Category.GREENS: CategoryColor("#E8F5E9", "#3D6B4A"),
+    ...
+}
+
+def generate_category_css_vars() -> str:
+    """Inject CSS variables into HTML head."""
+    ...
+```
+
+**Why separate?** Colors and flags are presentation concerns, not domain logic. By keeping them in `theme.py`:
+- Core domain stays pure (no presentation knowledge)
+- Single source of truth for both CSS and Plotly charts
+- Easy to update colors without touching domain code
+
+### 6. Bootstrap (`app.py`)
 
 **Purpose**: Wire everything together. Dependency injection happens here.
 
@@ -750,7 +807,7 @@ meal_planning/
 ├── core/                           # DOMAIN - Pure models & operations (ZERO I/O)
 │   ├── catalogue/
 │   │   ├── models.py              # VOIngredient, VODish
-│   │   └── enums.py               # PurchaseType, IngredientTag, DishTag
+│   │   └── enums.py               # PurchaseType, Category, Cuisine, Region
 │   ├── planning/
 │   │   ├── models.py              # MonthlyPlan, WeekPlan
 │   │   ├── enums.py               # Day
@@ -783,15 +840,29 @@ meal_planning/
 │   └── config/
 │       └── settings.py            # Paths, defaults
 │
-├── api/
-│   └── cli/
-│       ├── main.py                # Typer app with subcommands
-│       └── commands/
-│           ├── catalogue.py       # meal catalogue ...
-│           ├── planning.py        # meal plan ...
-│           ├── shopping.py        # meal shop ...
-│           ├── analysis.py        # meal analysis ...
-│           └── context.py         # meal context ...
+├── api/                            # EXTERNAL INTERFACES
+│   ├── cli/                       # Command-line interface
+│   │   ├── main.py                # Typer app with subcommands
+│   │   └── commands/
+│   │       ├── catalogue.py       # meal catalogue ...
+│   │       ├── planning.py        # meal plan ...
+│   │       ├── shopping.py        # meal shop ...
+│   │       ├── analysis.py        # meal analysis ...
+│   │       └── context.py         # meal context ...
+│   │
+│   └── dash/                      # Web UI (Palate)
+│       ├── app.py                 # Dash app, layout, theme injection
+│       ├── callbacks.py           # Reactive callbacks
+│       ├── components.py          # Component factories
+│       ├── assets/style.css       # Design system
+│       └── README.md              # Dash architecture docs
+│
+├── theme.py                        # PRESENTATION - Colors, flags, CSS tokens
+│
+├── copy/                           # UI copy/content (markdown)
+│   ├── app_header.md
+│   ├── app_about.md
+│   └── app_get_started.md
 │
 ├── docs/
 │   └── blobstore101.md            # BlobStore concepts guide

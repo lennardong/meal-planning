@@ -13,6 +13,7 @@ from meal_planning.app import get_app_context
 from meal_planning.core.catalogue.enums import Category, Cuisine
 from meal_planning.core.catalogue.models import Dish
 from meal_planning.api.dash.components import dish_card
+from meal_planning.theme import CATEGORY_COLOR
 
 
 def _get_dishes():
@@ -188,6 +189,8 @@ def generate_plan(n_clicks, shortlist_uids):
 
     # Chart 1: Categories by Week (stacked bar)
     if category_data:
+        # Build color map from theme (matches CSS tag colors)
+        color_map = {cat.value: CATEGORY_COLOR[cat].bold for cat in CATEGORY_COLOR}
         category_fig = px.bar(
             category_data,
             x="week",
@@ -195,6 +198,7 @@ def generate_plan(n_clicks, shortlist_uids):
             color="category",
             title="Categories by Week",
             barmode="stack",
+            color_discrete_map=color_map,
         )
         category_fig.update_layout(
             xaxis_title="",
@@ -427,4 +431,15 @@ def delete_dish(n_clicks, uid, shortlist):
 )
 def toggle_info_modal(n_clicks, is_open):
     """Toggle info modal on button click."""
+    return not is_open
+
+
+@callback(
+    Output("get-started-modal", "opened"),
+    Input("get-started-btn", "n_clicks"),
+    State("get-started-modal", "opened"),
+    prevent_initial_call=True,
+)
+def toggle_get_started_modal(n_clicks, is_open):
+    """Toggle get started modal on button click."""
     return not is_open

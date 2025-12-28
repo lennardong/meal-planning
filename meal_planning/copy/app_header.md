@@ -1,3 +1,1 @@
 # Palate
-
-*Expand your Palette*

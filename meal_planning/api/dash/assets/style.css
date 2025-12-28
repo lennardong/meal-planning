@@ -1,91 +1,295 @@
-/* Palate Design System - Basecamp-Inspired Warmth */
+/* =============================================================================
+   Palate Design System
+   ============================================================================= */
 
 :root {
   /* Brand Colors */
-  --color-saffron: #F4A940;
-  --color-saffron-hover: #E09830;
-  --color-aubergine: #5B3E6B;
+  --color-brand: #F4A940;
+  --color-brand-hover: #E09830;
+  --color-accent: #5B3E6B;
 
-  /* Warmer Neutrals (Basecamp-inspired) */
-  --color-canvas: #F5F3EF;
-  --color-section-bg: #FAFAF8;
-  --color-card-bg: #FFFFFF;
+  /* Background Colors */
+  --color-bg: #F5F3EF;
+  --color-bg-elevated: #FAFAF8;
+  --color-bg-card: #FFFFFF;
+
+  /* Text Colors */
+  --color-text: #1D1C1A;
+  --color-text-muted: #5C5955;
+  --color-text-subtle: #8C8780;
+
+  /* Border & UI */
   --color-border: #E8E4DF;
-  --color-charcoal: #1D1C1A;
-  --color-charcoal-light: #5C5955;
-  --color-muted: #8C8780;
   --color-chiclet-bg: #E8E4DF;
   --color-chiclet-text: #6B6560;
 
   /* Typography */
-  --font-display: 'DM Sans', sans-serif;
+  --font-display: 'BBH Hegarty', sans-serif;
+  --font-display-secondary: 'DM Sans', sans-serif;
+  --font-card: 'Nunito', sans-serif;
   --font-body: 'Inter', sans-serif;
+
+  /* Spacing Scale (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+
+  /* Font Sizes */
+  --text-xs: 10px;
+  --text-sm: 11px;
+  --text-md: 13px;
+  --text-base: 14px;
+  --text-lg: 16px;
+
+  /* Border Radii */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
 }
+
+/* =============================================================================
+   Base Styles
+   ============================================================================= */
 
 body {
-  background-color: var(--color-canvas) !important;
+  background-color: var(--color-bg);
   font-family: var(--font-body);
-  color: var(--color-charcoal);
+  color: var(--color-text);
 }
 
+/* Headings */
 h1, h2, h3, h4 {
   font-family: var(--font-display);
-  color: var(--color-aubergine);
+  color: var(--color-accent);
 }
 
-/* Markdown content styling */
+/* =============================================================================
+   Markdown Content
+   ============================================================================= */
+
 .dash-markdown h1 {
   font-family: var(--font-display);
-  color: var(--color-aubergine);
-  font-weight: 700;
+  color: var(--color-accent);
+  font-weight: 900;
 }
 
 .dash-markdown h2,
 .dash-markdown h3 {
-  font-family: var(--font-display);
-  color: var(--color-charcoal);
+  font-family: var(--font-display-secondary);
+  color: var(--color-text);
   font-weight: 600;
 }
 
 .dash-markdown blockquote {
-  border-left: 3px solid var(--color-saffron);
-  padding-left: 16px;
-  color: var(--color-charcoal-light);
+  border-left: 3px solid var(--color-brand);
+  padding-left: var(--space-4);
+  color: var(--color-text-muted);
   font-style: italic;
 }
 
-/* Seamless header - no border, matches canvas */
+/* =============================================================================
+   Mantine Overrides
+   ============================================================================= */
+
+/* Seamless header - matches canvas */
 .mantine-AppShell-header {
-  background-color: var(--color-canvas) !important;
-  border-bottom: none !important;
-  box-shadow: none !important;
+  background-color: var(--color-bg);
+  border-bottom: none;
+  box-shadow: none;
 }
 
-/* Card hover - saffron border highlight */
+/* Card hover - brand border highlight */
 .mantine-Paper-root:hover {
-  border-color: var(--color-saffron) !important;
-  transition: border-color 0.15s ease;
+  border-color: var(--color-brand);
+  transition: border-color var(--transition-fast);
 }
 
-/* Section chiclet label */
-.section-chiclet {
+/* =============================================================================
+   Chiclet Design System
+   ============================================================================= */
+
+/* Base chiclet (shared styles) */
+.chiclet {
   display: inline-block;
-  background: var(--color-chiclet-bg);
-  color: var(--color-chiclet-text);
-  font-size: 11px;
+  font-family: var(--font-display-secondary);
+  font-size: var(--text-sm);
   font-weight: 600;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-  padding: 6px 12px;
-  border-radius: 4px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-full);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
 }
 
-/* Counter chiclet */
-.counter-chiclet {
-  display: inline-block;
-  background: var(--color-canvas);
-  padding: 4px 10px;
-  border-radius: 4px;
-  font-size: 12px;
+/* Section label chiclet (e.g., "YOUR PALETTE", "YOUR CANVAS") */
+.chiclet--section {
+  font-family: var(--font-display);
+  background: var(--color-bg-elevated);
   color: var(--color-chiclet-text);
+  cursor: default;
 }
+
+/* Action chiclet (e.g., "See Your Colors") */
+.chiclet--action {
+  font-family: var(--font-display);
+  background: var(--color-accent);
+  color: var(--color-brand);
+  padding: var(--space-5) var(--space-5);
+  font-size: var(--text-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.chiclet--action:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Link chiclet (e.g., "Why Palate?") */
+.chiclet--link {
+  background: transparent;
+  color: var(--color-text-muted);
+  padding: var(--space-2) var(--space-3);
+}
+
+.chiclet--link:hover {
+  background: var(--color-chiclet-bg);
+  color: var(--color-text);
+}
+
+/* Counter chiclet (e.g., "12 dishes") */
+.chiclet--counter {
+  background: var(--color-bg);
+  color: var(--color-chiclet-text);
+  font-size: var(--text-xs);
+  padding: var(--space-1) var(--space-2);
+  cursor: default;
+}
+
+/* =============================================================================
+   Card System
+   ============================================================================= */
+
+/* Base card */
+.card {
+  position: relative;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.card:hover {
+  border-color: var(--color-brand);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Card layout */
+.card__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Card header row */
+.card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+/* Card title - Nunito for warmth */
+.card__title {
+  font-family: var(--font-card);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-text);
+  flex: 1;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Cuisine flag - positioned as "stamp" */
+.card__flag {
+  font-size: 18px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Card actions (edit/transfer buttons) - hidden until hover */
+.card__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--transition-fast), visibility var(--transition-fast);
+}
+
+.card:hover .card__actions {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Tags container */
+.card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-1);
+}
+
+/* =============================================================================
+   Tag System
+   ============================================================================= */
+
+/* Base tag - Nunito for warmth, pill shape */
+.tag {
+  display: inline-block;
+  font-family: var(--font-card);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+}
+
+/* Tag sizes */
+.tag--sm {
+  font-size: 12px;
+  padding: 5px 12px;
+}
+
+.tag--md {
+  font-size: var(--text-md);
+  padding: 6px 14px;
+}
+
+/* =============================================================================
+   Category Tag Colors (CSS variables from theme.py)
+   Variables injected at runtime via generate_category_css_vars()
+   ============================================================================= */
+
+.tag--category[data-category="greens"] { background: var(--cat-greens-bg); color: var(--cat-greens-text); }
+.tag--category[data-category="legumes"] { background: var(--cat-legumes-bg); color: var(--cat-legumes-text); }
+.tag--category[data-category="grains"] { background: var(--cat-grains-bg); color: var(--cat-grains-text); }
+.tag--category[data-category="alliums"] { background: var(--cat-alliums-bg); color: var(--cat-alliums-text); }
+.tag--category[data-category="cruciferous"] { background: var(--cat-cruciferous-bg); color: var(--cat-cruciferous-text); }
+.tag--category[data-category="fresh_herbs"] { background: var(--cat-fresh-herbs-bg); color: var(--cat-fresh-herbs-text); }
+.tag--category[data-category="seeds"] { background: var(--cat-seeds-bg); color: var(--cat-seeds-text); }
+.tag--category[data-category="fermented"] { background: var(--cat-fermented-bg); color: var(--cat-fermented-text); }
+.tag--category[data-category="root_veg"] { background: var(--cat-root-veg-bg); color: var(--cat-root-veg-text); }
+.tag--category[data-category="dairy"] { background: var(--cat-dairy-bg); color: var(--cat-dairy-text); }

@@ -2,15 +2,18 @@
 
 from __future__ import annotations
 
+import os
+
 import dash_mantine_components as dmc
-from dash import Dash, dcc
+from dash import Dash, dcc, html
 from dash_iconify import DashIconify
 
 # Import callbacks to register them
 from meal_planning.api.dash import callbacks as _  # noqa: F401
-from meal_planning.api.dash.components import dish_column, dish_modal, results_modal
+from meal_planning.api.dash.components import dish_column, dish_modal, results_modal, info_modal
 from meal_planning.app import get_app_context
 from meal_planning.copy import get_copy
+from meal_planning.theme import generate_category_css_vars
 
 # Get services (auto-initializes if needed)
 ctx = get_app_context()
@@ -18,23 +21,24 @@ ctx = get_app_context()
 # Create Dash app
 app = Dash(__name__, external_stylesheets=[dmc.styles.CHARTS])
 
-# Custom index with Google Fonts
-app.index_string = """
+# Custom index with Google Fonts and generated CSS variables
+app.index_string = f"""
 <!DOCTYPE html>
 <html>
     <head>
-        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
-        {%metas%}
+        <link href="https://fonts.googleapis.com/css2?family=BBH+Hegarty&family=DM+Sans:wght@400;600;700;900&family=Inter:wght@400;500&family=Nunito:wght@500;600;700&display=swap" rel="stylesheet">
+        <style>{generate_category_css_vars()}</style>
+        {{%metas%}}
         <title>Palate</title>
-        {%favicon%}
-        {%css%}
+        {{%favicon%}}
+        {{%css%}}
     </head>
     <body>
-        {%app_entry%}
+        {{%app_entry%}}
         <footer>
-            {%config%}
-            {%scripts%}
-            {%renderer%}
+            {{%config%}}
+            {{%scripts%}}
+            {{%renderer%}}
         </footer>
     </body>
 </html>
@@ -43,27 +47,37 @@ app.index_string = """
 # Build layout - no navbar, two-column main
 layout = dmc.AppShell(
     [
-        # Header with title + info button
+        # Header with title above, buttons below
         dmc.AppShellHeader(
-            dmc.Group(
+            dmc.Stack(
                 [
+                    # Title row
                     dcc.Markdown(
                         get_copy("app_header"),
                         style={"textAlign": "center", "margin": 0},
                     ),
-                    dmc.Button(
-                        "Why Palate?",
-                        id="info-btn",
-                        variant="subtle",
-                        color="gray",
-                        size="xs",
-                        radius="xl",
+                    # Buttons row (centered)
+                    dmc.Group(
+                        [
+                            html.Button(
+                                "Get Started",
+                                id="get-started-btn",
+                                className="chiclet chiclet--link",
+                            ),
+                            html.Button(
+                                "Why Palate?",
+                                id="info-btn",
+                                className="chiclet chiclet--link",
+                            ),
+                        ],
+                        justify="center",
+                        gap="sm",
                     ),
                 ],
-                justify="center",
+                gap=0,
                 align="center",
+                justify="center",
                 h="100%",
-                gap="xs",
             ),
         ),
         # Main content - two columns + results
@@ -77,20 +91,8 @@ layout = dmc.AppShell(
                     # Modals
                     dish_modal(),
                     results_modal(),
-                    # Info modal (about content)
-                    dmc.Modal(
-                        id="info-modal",
-                        title="Why Palate?",
-                        centered=True,
-                        size="lg",
-                        children=dmc.ScrollArea(
-                            dcc.Markdown(
-                                get_copy("app_about"),
-                                style={"fontSize": "14px", "lineHeight": "1.6"},
-                            ),
-                            h="60vh",
-                        ),
-                    ),
+                    info_modal("info-modal", "Why Palate?", "app_about"),
+                    info_modal("get-started-modal", "Get Started", "app_get_started"),
                     # Row 1: Your Palette and Your Canvas columns
                     dmc.SimpleGrid(
                         [
@@ -102,19 +104,17 @@ layout = dmc.AppShell(
                     ),
                     # See Your Colors button (centered, rainbow gradient)
                     dmc.Center(
-                        dmc.Button(
-                            "See Your Colors",
+                        html.Button(
+                            [
+                                DashIconify(
+                                    icon="mdi:palette",
+                                    width=18,
+                                    style={"marginRight": "8px"},
+                                ),
+                                "See Your Colors",
+                            ],
                             id="generate-btn",
-                            leftSection=DashIconify(icon="mdi:palette"),
-                            size="md",
-                            radius="xl",
-                            styles={
-                                "root": {
-                                    "background": "linear-gradient(135deg, #F4A940 0%, #E8C547 25%, #5BA4A4 50%, #7B4B94 75%, #D46A84 100%)",
-                                    "border": "none",
-                                    "boxShadow": "0 2px 8px rgba(0,0,0,0.15)",
-                                }
-                            },
+                            className="chiclet chiclet--action",
                         ),
                         py="md",
                     ),
@@ -124,7 +124,7 @@ layout = dmc.AppShell(
             )
         ),
     ],
-    header={"height": 80},
+    header={"height": 100},
     padding="md",
     id="appshell",
 )
@@ -147,9 +147,8 @@ app.layout = dmc.MantineProvider(
                 "#8B5A00",
             ],
         },
-        "fontFamily": "Inter, sans-serif",
-        "headings": {"fontFamily": "DM Sans, sans-serif"},
         "defaultRadius": "md",
+        # Typography handled by style.css (single source of truth)
     },
 )
 
@@ -158,4 +157,5 @@ app.layout = dmc.MantineProvider(
 server = app.server
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 8050))
+    app.run(debug=True, port=port)
