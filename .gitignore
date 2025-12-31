@@ -145,3 +145,7 @@ cython_debug/
 # OS
 .DS_Store
 Thumbs.db
+
+# GCP service account keys (NEVER commit these)
+*-key.json
+deployer-*.json

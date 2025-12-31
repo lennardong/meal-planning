@@ -1,0 +1,108 @@
+# ==============================================================================
+# Deploy to Cloud Run
+# ==============================================================================
+# Automatically builds and deploys Palatte when a GitHub release is published.
+#
+# Triggers:
+#   - Publishing a release (e.g., v1.0.0)
+#
+# Prerequisites:
+#   - GCP_SA_KEY secret containing deployer service account JSON
+#   - GCP project set up (run devops/cloud/01-setup-project.sh)
+#
+# Configuration:
+#   - Edit env vars below to match your config.env settings
+# ==============================================================================
+
+name: Deploy to Cloud Run
+
+on:
+  release:
+    types: [published]
+
+env:
+  # Must match devops/cloud/config.env values
+  PROJECT_ID: meal-planner-482913
+  REGION: asia-southeast1
+  SERVICE_NAME: palatte
+  REPO_NAME: palatte-repo
+  SA_RUNTIME: runtime-palatte
+  CONTAINER_PORT: "8060"
+  MAX_INSTANCES: "2"
+
+jobs:
+  deploy:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      # ----------------------------------------------------------------------
+      # Checkout code
+      # ----------------------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ----------------------------------------------------------------------
+      # Authenticate with GCP
+      # ----------------------------------------------------------------------
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      # ----------------------------------------------------------------------
+      # Configure Docker for Artifact Registry
+      # ----------------------------------------------------------------------
+      - name: Configure Docker
+        run: |
+          gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev --quiet
+
+      # ----------------------------------------------------------------------
+      # Build and push Docker image
+      # ----------------------------------------------------------------------
+      - name: Build and push Docker image
+        run: |
+          IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.SERVICE_NAME }}"
+
+          docker build \
+            --platform=linux/amd64 \
+            -f devops/docker/Dockerfile.dash-app \
+            -t "${IMAGE}:${{ github.ref_name }}" \
+            -t "${IMAGE}:latest" \
+            .
+
+          docker push "${IMAGE}:${{ github.ref_name }}"
+          docker push "${IMAGE}:latest"
+
+      # ----------------------------------------------------------------------
+      # Deploy to Cloud Run
+      # ----------------------------------------------------------------------
+      - name: Deploy to Cloud Run
+        run: |
+          IMAGE="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.SERVICE_NAME }}"
+
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image="${IMAGE}:${{ github.ref_name }}" \
+            --region=${{ env.REGION }} \
+            --platform=managed \
+            --port=${{ env.CONTAINER_PORT }} \
+            --allow-unauthenticated \
+            --service-account="${{ env.SA_RUNTIME }}@${{ env.PROJECT_ID }}.iam.gserviceaccount.com" \
+            --max-instances=${{ env.MAX_INSTANCES }} \
+            --quiet
+
+      # ----------------------------------------------------------------------
+      # Output service URL
+      # ----------------------------------------------------------------------
+      - name: Get service URL
+        run: |
+          URL=$(gcloud run services describe ${{ env.SERVICE_NAME }} \
+            --region=${{ env.REGION }} \
+            --format='value(status.url)')
+          echo "## Deployment Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Service URL:** ${URL}" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
