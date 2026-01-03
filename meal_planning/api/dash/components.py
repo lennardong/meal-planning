@@ -376,6 +376,8 @@ def results_modal() -> dmc.Modal:
             ),
             h="75vh",
             type="auto",
+            offsetScrollbars=True,
+            scrollbarSize=8,
         ),
     )
 
