@@ -4,10 +4,9 @@ from __future__ import annotations
 
 from collections import Counter
 
-from dash import callback, Output, Input, State, ALL, ctx
+from dash import callback, Output, Input, State, ALL, ctx, html
 from dash.exceptions import PreventUpdate
 import dash_mantine_components as dmc
-import plotly.express as px
 
 from meal_planning.app import get_app_context
 from meal_planning.core.catalogue.enums import Category, Cuisine
@@ -104,25 +103,63 @@ def render_columns(shortlist_uids, cat_search, cat_cuisine, sl_search, sl_cuisin
 
 
 @callback(
+    # Modal state
     Output("results-modal", "opened"),
+    # Hero score section
+    Output("hero-score-number", "children"),
+    Output("hero-score-bar", "value"),
+    Output("hero-score-copy", "children"),
+    # Colors and explore next
+    Output("colors-bars", "children"),
+    Output("explore-next", "children"),
+    Output("category-tip", "children"),
+    # Range section
+    Output("cuisines-label", "children"),
+    Output("cuisines-bar", "value"),
+    Output("cuisines-copy", "children"),
+    Output("balance-label", "children"),
+    Output("balance-bar", "value"),
+    Output("balance-copy", "children"),
+    # Week cards
     Output("plan-weeks", "children"),
-    Output("score-summary", "children"),
-    Output("category-chart", "figure"),
-    Output("cuisine-chart", "figure"),
-    Output("region-chart", "figure"),
+    Output("repetition-copy", "children"),
     Input("generate-btn", "n_clicks"),
     State("shortlist-store", "data"),
     prevent_initial_call=True,
 )
 def generate_plan(n_clicks, shortlist_uids):
     """Generate plan and diversity analysis from shortlisted dishes."""
-    empty_fig = px.pie(values=[1], names=["No data"], title="No data")
-    empty_fig.update_layout(showlegend=False, margin=dict(t=40, b=20, l=20, r=20))
+    from meal_planning.copy.report_copy import (
+        get_score_feedback,
+        get_cuisine_feedback,
+        get_balance_feedback,
+        get_repetition_feedback,
+        get_category_tip,
+        get_category_examples,
+        get_explore_intro,
+    )
 
-    empty_summary = [dmc.Text("Select dishes first", c="dimmed", size="sm")]
+    # Empty state defaults
+    empty_state = (
+        True,  # Open modal
+        "0%",  # hero score number
+        0,  # hero score bar
+        [html.P("Select some dishes to see your palette.", className="hero-score__body")],
+        [],  # colors bars
+        [html.P("Add dishes to discover what to explore.", className="explore-intro")],  # explore next
+        "",  # category tip
+        "Cuisines: 0 of 11",
+        0,
+        "Add dishes to see your cuisine range.",
+        "Balance: 0% Eastern / 0% Western",
+        50,
+        "Add dishes to see your regional balance.",
+        [],  # week cards
+        "",  # repetition copy
+    )
 
     if not shortlist_uids:
-        return True, [], empty_summary, empty_fig, empty_fig, empty_fig
+        return empty_state
 
     app_ctx = get_app_context()
     all_dishes = app_ctx.catalogue.list_dishes()
@@ -130,7 +167,7 @@ def generate_plan(n_clicks, shortlist_uids):
     selected = [dish_map[uid] for uid in shortlist_uids if uid in dish_map]
 
     if not selected:
-        return True, [], empty_summary, empty_fig, empty_fig, empty_fig
+        return empty_state
 
     plan, result = app_ctx.planning.create_plan(
         name="Generated Plan",
@@ -139,133 +176,230 @@ def generate_plan(n_clicks, shortlist_uids):
         dishes_per_week=4,
     )
 
+    # ==========================================================================
     # Collect data for analysis
+    # ==========================================================================
     week_cards = []
-    category_data = []
+    category_counts = Counter()  # Total counts across all weeks
     all_categories_used = set()
     cuisine_counts = Counter()
     region_counts = Counter()
+    unique_dishes = set()
+    total_dish_slots = 0
 
     for i, week in enumerate(plan.weeks, 1):
-        dish_names = [dish_map[uid].name for uid in week.dishes if uid in dish_map]
+        week_dishes = [dish_map[uid] for uid in week.dishes if uid in dish_map]
 
-        # Build card for this week
+        # Build enhanced week card with category color dots
+        dish_items = []
+        for dish in week_dishes:
+            unique_dishes.add(dish.uid)
+            total_dish_slots += 1
+
+            # Get first category color for the dot
+            cat_color = "#E0E0E0"  # Default gray
+            if dish.categories:
+                first_cat = dish.categories[0]
+                cat_color = CATEGORY_COLOR.get(first_cat, CATEGORY_COLOR[Category.GREENS]).bold
+
+            dish_items.append(
+                html.Div(
+                    [
+                        html.Span(
+                            "",
+                            className="dish-dot",
+                            style={"backgroundColor": cat_color},
+                        ),
+                        html.Span(dish.name, className="dish-name"),
+                    ],
+                    className="dish-row",
+                )
+            )
+
         week_cards.append(
             dmc.Card(
                 [
-                    dmc.Text(f"Week {i}", fw=700, size="sm"),
+                    dmc.Text(f"Week {i}", fw=700, size="sm", c="dimmed"),
                     dmc.Divider(my="xs"),
-                    dmc.Stack(
-                        [dmc.Text(name, size="sm", c="dark", inherit=False) for name in dish_names]
-                        if dish_names
-                        else [dmc.Text("Empty", c="dimmed", size="sm")],
-                        gap="xs",
+                    html.Div(
+                        dish_items if dish_items else [
+                            dmc.Text("Empty", c="dimmed", size="sm")
+                        ],
+                        className="week-dishes",
                     ),
                 ],
                 withBorder=True,
                 p="sm",
+                className="week-card",
             )
         )
 
-        # Collect data for charts
-        week_categories = Counter()
-        for uid in week.dishes:
-            if uid in dish_map:
-                dish = dish_map[uid]
-                # Categories
-                for cat in dish.categories:
-                    week_categories[cat.value] += 1
-                    all_categories_used.add(cat.value)
-                # Cuisine and region
-                cuisine_counts[dish.cuisine.value.title()] += 1
-                region_counts[dish.region.value.title()] += 1
+        # Collect category and cuisine data
+        for dish in week_dishes:
+            for cat in dish.categories:
+                category_counts[cat.value] += 1
+                all_categories_used.add(cat.value)
+            cuisine_counts[dish.cuisine.value.title()] += 1
+            region_counts[dish.region.value.title()] += 1
 
-        for cat, count in week_categories.items():
-            category_data.append({
-                "week": f"Week {i}",
-                "category": cat,
-                "count": count,
-            })
-
-    # Chart 1: Categories by Week (stacked bar)
-    if category_data:
-        # Build color map from theme (matches CSS tag colors)
-        color_map = {cat.value: CATEGORY_COLOR[cat].bold for cat in CATEGORY_COLOR}
-        category_fig = px.bar(
-            category_data,
-            x="week",
-            y="count",
-            color="category",
-            title="Categories by Week",
-            barmode="stack",
-            color_discrete_map=color_map,
-        )
-        category_fig.update_layout(
-            xaxis_title="",
-            yaxis_title="Count",
-            legend_title="Category",
-            margin=dict(t=50, b=40, l=50, r=20),
-            legend=dict(orientation="v", yanchor="top", y=1, xanchor="left", x=1.02),
-        )
-    else:
-        category_fig = empty_fig
-
-    # Chart 2: Cuisine Distribution (pie)
-    if cuisine_counts:
-        cuisine_fig = px.pie(
-            values=list(cuisine_counts.values()),
-            names=list(cuisine_counts.keys()),
-            title="Cuisine Variety",
-            hole=0.4,  # Donut style
-        )
-        cuisine_fig.update_layout(
-            margin=dict(t=50, b=40, l=20, r=20),
-            legend=dict(orientation="v", yanchor="middle", y=0.5, xanchor="left", x=1.02),
-            showlegend=True,
-        )
-        cuisine_fig.update_traces(textposition='inside', textinfo='percent')
-    else:
-        cuisine_fig = empty_fig
-
-    # Chart 3: Region Balance (pie)
-    if region_counts:
-        region_fig = px.pie(
-            values=list(region_counts.values()),
-            names=list(region_counts.keys()),
-            title="Region Balance",
-            color_discrete_map={"Eastern": "#228be6", "Western": "#fd7e14"},
-        )
-        region_fig.update_layout(
-            margin=dict(t=50, b=40, l=20, r=20),
-            legend=dict(orientation="v", yanchor="middle", y=0.5, xanchor="left", x=1.02),
-        )
-        region_fig.update_traces(textposition='inside', textinfo='percent+label')
-    else:
-        region_fig = empty_fig
-
-    # Score Summary
+    # ==========================================================================
+    # Calculate metrics
+    # ==========================================================================
     total_categories = len(Category)
     categories_covered = len(all_categories_used)
     cat_score = round((categories_covered / total_categories) * 100)
-    unique_cuisines = len(cuisine_counts)
-    eastern_pct = round(region_counts.get("Eastern", 0) / sum(region_counts.values()) * 100) if region_counts else 0
-    western_pct = 100 - eastern_pct
 
-    # Horizontal score summary with key metrics
-    score_summary = [
-        dmc.Badge(f"Diversity: {cat_score}%", size="lg", color="blue", variant="filled"),
-        dmc.Badge(f"Categories: {categories_covered}/{total_categories}", size="lg", variant="light"),
-        dmc.Badge(f"Cuisines: {unique_cuisines}", size="lg", variant="light"),
-        dmc.Badge(f"Balance: {eastern_pct}% E / {western_pct}% W", size="lg", variant="light"),
+    unique_cuisines = len(cuisine_counts)
+    total_cuisines = len(Cuisine)
+
+    eastern_count = region_counts.get("Eastern", 0)
+    western_count = region_counts.get("Western", 0)
+    total_region = eastern_count + western_count
+    eastern_pct = round(eastern_count / total_region * 100) if total_region else 0
+    western_pct = 100 - eastern_pct if total_region else 0
+
+    # ==========================================================================
+    # Build Hero Score Section
+    # ==========================================================================
+    hero_score_number = f"{cat_score}%"
+
+    # Get all category names for missing list
+    all_category_names = [cat.value.replace("_", " ").title() for cat in Category]
+    used_category_names = [cat.replace("_", " ").title() for cat in all_categories_used]
+    missing_categories = [name for name in all_category_names if name not in used_category_names]
+
+    # Get verbose copy
+    cuisine_list = list(cuisine_counts.keys())
+    score_copy = get_score_feedback(cat_score, categories_covered, unique_cuisines, missing_categories)
+
+    hero_copy = [
+        html.H2(score_copy["headline"], className="hero-score__headline"),
+        html.P(score_copy["body"], className="hero-score__body"),
     ]
+
+    # ==========================================================================
+    # Build Colors Bars (categories you're hitting)
+    # ==========================================================================
+    colors_bars = []
+    max_count = max(category_counts.values()) if category_counts else 1
+
+    # Sort by count descending
+    sorted_categories = sorted(category_counts.items(), key=lambda x: x[1], reverse=True)
+
+    for cat_value, count in sorted_categories:
+        cat_enum = Category(cat_value)
+        cat_color = CATEGORY_COLOR.get(cat_enum, CATEGORY_COLOR[Category.GREENS])
+        cat_label = cat_value.replace("_", " ").title()
+        bar_pct = round((count / max_count) * 100)
+
+        colors_bars.append(
+            html.Div(
+                [
+                    html.Div(
+                        [
+                            html.Span(cat_label, className="color-bar__label"),
+                            html.Span(f"{count}", className="color-bar__count"),
+                        ],
+                        className="color-bar__header",
+                    ),
+                    html.Div(
+                        html.Div(
+                            className="color-bar__fill",
+                            style={
+                                "width": f"{bar_pct}%",
+                                "backgroundColor": cat_color.bold,
+                            },
+                        ),
+                        className="color-bar__track",
+                        style={"backgroundColor": cat_color.muted},
+                    ),
+                ],
+                className="color-bar",
+            )
+        )
+
+    # ==========================================================================
+    # Build Explore Next (missing categories with positive framing)
+    # ==========================================================================
+    explore_cards = []
+    for cat in Category:
+        if cat.value not in all_categories_used:
+            cat_label = cat.value.replace("_", " ").title()
+            cat_color = CATEGORY_COLOR.get(cat, CATEGORY_COLOR[Category.GREENS])
+            examples = get_category_examples(cat.value)
+
+            explore_cards.append(
+                html.Div(
+                    [
+                        html.Div(
+                            [
+                                html.Span("+", className="explore-card__plus"),
+                                html.Span(cat_label, className="explore-card__label"),
+                            ],
+                            className="explore-card__header",
+                        ),
+                        html.Span(examples, className="explore-card__examples") if examples else None,
+                    ],
+                    className="explore-card",
+                    style={
+                        "backgroundColor": cat_color.muted,
+                        "color": cat_color.bold,
+                    },
+                )
+            )
+
+    has_missing = len(explore_cards) > 0
+    intro_text = get_explore_intro(has_missing)
+
+    if explore_cards:
+        explore_section = [
+            html.P(intro_text, className="explore-intro"),
+            html.Div(explore_cards, className="explore-cards"),
+        ]
+    else:
+        explore_section = [
+            html.P(intro_text, className="explore-empty"),
+        ]
+
+    # ==========================================================================
+    # Category Tip
+    # ==========================================================================
+    top_category = sorted_categories[0][0] if sorted_categories else None
+    category_tip = get_category_tip(top_category, categories_covered)
+
+    # ==========================================================================
+    # Build Range Section
+    # ==========================================================================
+    cuisines_label = f"Cuisines: {unique_cuisines} of {total_cuisines}"
+    cuisines_bar_value = round((unique_cuisines / total_cuisines) * 100)
+    cuisines_copy = get_cuisine_feedback(cuisine_list)
+
+    # Balance now shows balance score (50/50 = 100%, 100/0 = 0%)
+    balance_score, balance_copy = get_balance_feedback(eastern_pct, western_pct)
+    balance_label = f"How balanced? ({eastern_pct}% Eastern / {western_pct}% Western)"
+    balance_bar_value = balance_score
+
+    # ==========================================================================
+    # Repetition Copy
+    # ==========================================================================
+    repetition_copy = get_repetition_feedback(len(unique_dishes), total_dish_slots)
 
     return (
         True,  # Open modal
+        hero_score_number,
+        cat_score,  # hero score bar value
+        hero_copy,
+        colors_bars,
+        explore_section,
+        category_tip,
+        cuisines_label,
+        cuisines_bar_value,
+        cuisines_copy,
+        balance_label,
+        balance_bar_value,
+        balance_copy,
         week_cards,
-        score_summary,
-        category_fig,
-        cuisine_fig,
-        region_fig,
+        repetition_copy,
     )
 
 

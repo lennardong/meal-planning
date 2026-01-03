@@ -37,7 +37,7 @@ One word. Two meanings. Both true.
 
 ## The Line
 
-> **"Count colors, cuisines, and kingdoms—not calories. The wider your palette, the better your gut, your mood, your mind."**
+> **"Count colors, cuisines, and kingdoms instead of calories. The wider your palette, the better your gut, your mood, your mind."**
 
 That's it. That's what Palate does.
 

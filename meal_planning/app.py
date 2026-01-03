@@ -12,14 +12,14 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from meal_planning.infra.config import get_data_path, get_user_id
 from meal_planning.infra.stores.local_filesystem import LocalFilesystemBlobStore
 from meal_planning.infra.stores.migration import migrate_if_needed
-from meal_planning.infra.config import get_data_path, get_user_id
-from meal_planning.services.catalogue import CatalogueService
-from meal_planning.services.planning import PlanningService
-from meal_planning.services.context import ContextService
-from meal_planning.services.analysis import AnalysisService
 from meal_planning.services.ai_assistant import AIAssistantService
+from meal_planning.services.analysis import AnalysisService
+from meal_planning.services.catalogue import CatalogueService
+from meal_planning.services.context import ContextService
+from meal_planning.services.planning import PlanningService
 
 if TYPE_CHECKING:
     from meal_planning.services.ports.ai_client import AIClientPort
@@ -58,7 +58,10 @@ def create_app_context(
         AppContext with all services initialized.
     """
     # Use defaults from config if not provided
-    data_path = data_path or get_data_path()
+    data_path = (
+        data_path or get_data_path()
+    )  # TODO this feels to magical. we should expect it in args and/or set a default there, not bury this here
+    # TODO similar fo rother bootstrapping funcs. I prefer explicit over implicity with sensiblle defaults
     user_id = user_id or get_user_id()
 
     # Auto-migrate if needed

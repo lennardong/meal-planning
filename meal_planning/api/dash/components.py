@@ -220,7 +220,7 @@ def dish_column(title: str, column_id: str, direction: str) -> dmc.Card:
 
 
 def results_modal() -> dmc.Modal:
-    """Results modal - simple single-page scrollable layout."""
+    """Results modal - redesigned with hero score, verbose copy, and blind spots."""
     return dmc.Modal(
         id="results-modal",
         title="Your Palate Score",
@@ -230,34 +230,151 @@ def results_modal() -> dmc.Modal:
         children=dmc.ScrollArea(
             dmc.Stack(
                 [
-                    # Row 1: Score summary (horizontal badges)
-                    dmc.Group(
-                        id="score-summary",
-                        children=[],
-                        justify="center",
-                        gap="md",
+                    # ==========================================================
+                    # Section 1: Hero Score
+                    # ==========================================================
+                    html.Div(
+                        [
+                            # Large score number
+                            html.Div(
+                                id="hero-score-number",
+                                className="hero-score__number",
+                                children="0%",
+                            ),
+                            # Spectrum progress bar
+                            dmc.Progress(
+                                id="hero-score-bar",
+                                value=0,
+                                size="xl",
+                                radius="xl",
+                                color="saffron",
+                                style={"marginBottom": "16px"},
+                            ),
+                            # Verbose copy block
+                            html.Div(
+                                id="hero-score-copy",
+                                className="hero-score__copy",
+                                children=[],
+                            ),
+                        ],
+                        className="hero-score",
                     ),
-                    # Row 2: Week cards
-                    dmc.SimpleGrid(
-                        id="plan-weeks",
-                        cols=4,
-                        spacing="md",
-                        children=[],
-                    ),
-                    # Row 3: Charts
+                    # ==========================================================
+                    # Section 2: Colors + Explore Next (side by side)
+                    # ==========================================================
                     dmc.SimpleGrid(
                         [
-                            dcc.Graph(id="category-chart", style={"height": "300px"}),
-                            dcc.Graph(id="cuisine-chart", style={"height": "300px"}),
-                            dcc.Graph(id="region-chart", style={"height": "300px"}),
+                            # Left: What you're eating (categories you're hitting)
+                            html.Div(
+                                [
+                                    html.H3("What you're eating", className="section-title"),
+                                    html.Div(
+                                        id="colors-bars",
+                                        className="colors-section",
+                                        children=[],
+                                    ),
+                                ],
+                            ),
+                            # Right: Try adding... (positive framing)
+                            html.Div(
+                                [
+                                    html.H3("Try adding...", className="section-title"),
+                                    html.Div(
+                                        id="explore-next",
+                                        className="explore-section",
+                                        children=[],
+                                    ),
+                                ],
+                            ),
                         ],
-                        cols=3,
-                        spacing="md",
+                        cols={"base": 1, "md": 2},
+                        spacing="xl",
+                    ),
+                    # Contextual tip
+                    html.Div(
+                        id="category-tip",
+                        className="category-tip",
+                        children="",
+                    ),
+                    # ==========================================================
+                    # Section 3: Your Range (Cuisines + Balance)
+                    # ==========================================================
+                    html.Div(
+                        [
+                            html.H3("How far you're traveling", className="section-title"),
+                            # Cuisines
+                            html.Div(
+                                [
+                                    html.Div(
+                                        id="cuisines-label",
+                                        className="range-label",
+                                        children="Cuisines: 0 of 11",
+                                    ),
+                                    dmc.Progress(
+                                        id="cuisines-bar",
+                                        value=0,
+                                        size="lg",
+                                        radius="xl",
+                                        color="grape",
+                                    ),
+                                    html.Div(
+                                        id="cuisines-copy",
+                                        className="range-copy",
+                                        children="",
+                                    ),
+                                ],
+                                className="range-metric",
+                            ),
+                            # Balance
+                            html.Div(
+                                [
+                                    html.Div(
+                                        id="balance-label",
+                                        className="range-label",
+                                        children="Balance: 0% Eastern / 0% Western",
+                                    ),
+                                    dmc.Progress(
+                                        id="balance-bar",
+                                        value=50,
+                                        size="lg",
+                                        radius="xl",
+                                        color="blue",
+                                    ),
+                                    html.Div(
+                                        id="balance-copy",
+                                        className="range-copy",
+                                        children="",
+                                    ),
+                                ],
+                                className="range-metric",
+                            ),
+                        ],
+                        className="range-section",
+                    ),
+                    # ==========================================================
+                    # Section 4: Your Month (Enhanced Week Cards)
+                    # ==========================================================
+                    html.Div(
+                        [
+                            html.H3("Your menu this month", className="section-title"),
+                            dmc.SimpleGrid(
+                                id="plan-weeks",
+                                cols={"base": 2, "md": 4},
+                                spacing="md",
+                                children=[],
+                            ),
+                            # Repetition observation
+                            html.Div(
+                                id="repetition-copy",
+                                className="repetition-copy",
+                                children="",
+                            ),
+                        ],
                     ),
                 ],
                 gap="xl",
             ),
-            h="70vh",
+            h="75vh",
             type="auto",
         ),
     )
