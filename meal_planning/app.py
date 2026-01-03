@@ -134,3 +134,58 @@ def reset_app_context() -> None:
     """Reset the global context. Useful for testing."""
     global _app_context
     _app_context = None
+
+
+# =============================================================================
+# Multi-User Session Management
+# =============================================================================
+
+
+class AppContextManager:
+    """Manages per-user application contexts for multi-user support.
+
+    Each user session gets its own isolated context with separate data.
+    New users automatically get a copy of the default dishes.
+    """
+
+    def __init__(self):
+        self._contexts: dict[str, AppContext] = {}
+
+    def get_context(self, user_id: str) -> AppContext:
+        """Get or create context for a user.
+
+        Args:
+            user_id: User's session ID.
+
+        Returns:
+            AppContext for the user.
+        """
+        if user_id not in self._contexts:
+            ctx = create_app_context(user_id=user_id)
+            # Copy default dishes for new users
+            if not ctx.catalogue.list_dishes():
+                self._copy_default_dishes(ctx)
+            self._contexts[user_id] = ctx
+        return self._contexts[user_id]
+
+    def _copy_default_dishes(self, ctx: AppContext) -> None:
+        """Copy dishes from default catalogue to new user."""
+        default_ctx = create_app_context(user_id="default")
+        for dish in default_ctx.catalogue.list_dishes():
+            ctx.catalogue.add_dish(dish)
+        ctx.catalogue.save()
+
+
+_context_manager = AppContextManager()
+
+
+def get_user_context(user_id: str) -> AppContext:
+    """Get context for a specific user session.
+
+    Args:
+        user_id: User's session ID (from browser localStorage).
+
+    Returns:
+        AppContext isolated to that user.
+    """
+    return _context_manager.get_context(user_id)

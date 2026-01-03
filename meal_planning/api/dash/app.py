@@ -11,12 +11,8 @@ from dash_iconify import DashIconify
 # Import callbacks to register them
 from meal_planning.api.dash import callbacks as _  # noqa: F401
 from meal_planning.api.dash.components import dish_column, dish_modal, results_modal, info_modal
-from meal_planning.app import get_app_context
 from meal_planning.copy import get_copy
 from meal_planning.theme import generate_category_css_vars
-
-# Get services (auto-initializes if needed)
-ctx = get_app_context()
 
 # Create Dash app
 app = Dash(__name__, external_stylesheets=[dmc.styles.CHARTS])
@@ -85,6 +81,7 @@ layout = dmc.AppShell(
             dmc.Stack(
                 [
                     # Stores for state
+                    dcc.Store(id="session-id-store", data="", storage_type="local"),  # Persistent session ID
                     dcc.Store(id="shortlist-store", data=[]),
                     dcc.Store(id="dish-modal-mode", data="add"),  # "add" or "edit"
                     dcc.Store(id="dish-modal-uid", data=None),  # uid being edited

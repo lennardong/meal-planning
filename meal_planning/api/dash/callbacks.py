@@ -2,23 +2,41 @@
 
 from __future__ import annotations
 
+import uuid
 from collections import Counter
 
 from dash import callback, Output, Input, State, ALL, ctx, html
 from dash.exceptions import PreventUpdate
 import dash_mantine_components as dmc
 
-from meal_planning.app import get_app_context
+from meal_planning.app import get_app_context, get_user_context
 from meal_planning.core.catalogue.enums import Category, Cuisine
 from meal_planning.core.catalogue.models import Dish
 from meal_planning.api.dash.components import dish_card
 from meal_planning.theme import CATEGORY_COLOR
 
 
-def _get_dishes():
-    """Get all dishes from catalogue."""
-    app_ctx = get_app_context()
-    return app_ctx.catalogue.list_dishes()
+def _get_context(session_id: str | None):
+    """Get app context for session, falling back to default."""
+    if session_id:
+        return get_user_context(session_id)
+    return get_app_context()
+
+
+# =============================================================================
+# Session Management
+# =============================================================================
+
+
+@callback(
+    Output("session-id-store", "data"),
+    Input("session-id-store", "data"),
+)
+def init_session(session_id):
+    """Generate session ID on first visit, stored in localStorage."""
+    if not session_id:
+        return str(uuid.uuid4())
+    raise PreventUpdate
 
 
 def _filter_dishes(dishes, search: str | None, cuisine: str | None):
@@ -72,10 +90,12 @@ def update_shortlist_store(add_clicks, remove_clicks, current_shortlist):
     Input("catalogue-cuisine-filter", "value"),
     Input("shortlist-search", "value"),
     Input("shortlist-cuisine-filter", "value"),
+    State("session-id-store", "data"),
 )
-def render_columns(shortlist_uids, cat_search, cat_cuisine, sl_search, sl_cuisine):
+def render_columns(shortlist_uids, cat_search, cat_cuisine, sl_search, sl_cuisine, session_id):
     """Re-render both columns when selection or filters change."""
-    all_dishes = _get_dishes()
+    app_ctx = _get_context(session_id)
+    all_dishes = app_ctx.catalogue.list_dishes()
     dish_map = {d.uid: d for d in all_dishes}
 
     # Ensure shortlist_uids is a list
@@ -125,9 +145,10 @@ def render_columns(shortlist_uids, cat_search, cat_cuisine, sl_search, sl_cuisin
     Output("repetition-copy", "children"),
     Input("generate-btn", "n_clicks"),
     State("shortlist-store", "data"),
+    State("session-id-store", "data"),
     prevent_initial_call=True,
 )
-def generate_plan(n_clicks, shortlist_uids):
+def generate_plan(n_clicks, shortlist_uids, session_id):
     """Generate plan and diversity analysis from shortlisted dishes."""
     from meal_planning.copy.report_copy import (
         get_score_feedback,
@@ -161,7 +182,7 @@ def generate_plan(n_clicks, shortlist_uids):
     if not shortlist_uids:
         return empty_state
 
-    app_ctx = get_app_context()
+    app_ctx = _get_context(session_id)
     all_dishes = app_ctx.catalogue.list_dishes()
     dish_map = {d.uid: d for d in all_dishes}
     selected = [dish_map[uid] for uid in shortlist_uids if uid in dish_map]
@@ -421,9 +442,10 @@ def generate_plan(n_clicks, shortlist_uids):
     Input("add-dish-btn", "n_clicks"),
     Input({"type": "edit-dish", "uid": ALL}, "n_clicks"),
     State("dish-modal", "opened"),
+    State("session-id-store", "data"),
     prevent_initial_call=True,
 )
-def open_modal(add_clicks, edit_clicks, is_open):
+def open_modal(add_clicks, edit_clicks, is_open, session_id):
     """Open modal for add or edit operations."""
     # Guard: prevent firing on initial load or when no real click occurred
     if not ctx.triggered or ctx.triggered[0]["value"] is None:
@@ -455,7 +477,7 @@ def open_modal(add_clicks, edit_clicks, is_open):
         uid = triggered.get("uid")
         if uid:
             # Load dish data
-            app_ctx = get_app_context()
+            app_ctx = _get_context(session_id)
             all_dishes = app_ctx.catalogue.list_dishes()
             dish = next((d for d in all_dishes if d.uid == uid), None)
 
@@ -488,15 +510,16 @@ def open_modal(add_clicks, edit_clicks, is_open):
     State("dish-tags", "value"),
     State("dish-recipe", "value"),
     State("shortlist-store", "data"),
+    State("session-id-store", "data"),
     prevent_initial_call=True,
 )
-def save_dish(n_clicks, mode, uid, name, cuisine, categories, tags, recipe, shortlist):
+def save_dish(n_clicks, mode, uid, name, cuisine, categories, tags, recipe, shortlist, session_id):
     """Save dish (add new or update existing)."""
     if not name or not cuisine:
         # Don't close modal if required fields missing
         return True, shortlist
 
-    app_ctx = get_app_context()
+    app_ctx = _get_context(session_id)
 
     # Convert string values back to enums
     cuisine_enum = Cuisine(cuisine)
@@ -536,14 +559,15 @@ def save_dish(n_clicks, mode, uid, name, cuisine, categories, tags, recipe, shor
     Input("delete-dish-btn", "n_clicks"),
     State("dish-modal-uid", "data"),
     State("shortlist-store", "data"),
+    State("session-id-store", "data"),
     prevent_initial_call=True,
 )
-def delete_dish(n_clicks, uid, shortlist):
+def delete_dish(n_clicks, uid, shortlist, session_id):
     """Delete dish from catalogue."""
     if not uid:
         return True, shortlist
 
-    app_ctx = get_app_context()
+    app_ctx = _get_context(session_id)
     app_ctx.catalogue.delete_dish(uid)
     app_ctx.catalogue.save()
 
