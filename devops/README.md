@@ -171,6 +171,35 @@ Things that would be "best practice" in production but are overkill here:
 
 ---
 
+## How Multi-User Sessions Work
+
+We skipped databases and auth, but we still support multiple concurrent users. Each browser gets an isolated session:
+
+```
+Browser localStorage                    Server                         Filesystem
+        │                                  │                               │
+        │  session-id = "abc123-uuid"      │                               │
+        │─────────────────────────────────>│                               │
+        │                                  │                               │
+        │                                  │  AppContextManager routes     │
+        │                                  │  to user's data directory     │
+        │                                  │──────────────────────────────>│
+        │                                  │                               │
+        │                                  │                 data/abc123-uuid/
+        │                                  │                    ├── dishes.json
+        │                                  │                    └── plans.json
+```
+
+**Key points:**
+- **Session ID**: UUID generated on first visit, stored in browser localStorage
+- **Data isolation**: Each session gets its own `data/{session-id}/` directory
+- **No server-side sessions**: Stateless Cloud Run instances work perfectly
+- **New users**: Automatically get default dishes copied on first access
+
+For the full technical deep-dive (5-layer architecture, code patterns, design decisions), see the [Session Architecture Guide](../meal_planning/docs/session-architecture.md).
+
+---
+
 ## Folder Structure
 
 ```
